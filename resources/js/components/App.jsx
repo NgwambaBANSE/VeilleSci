@@ -18,17 +18,22 @@ const joursRestants = (date) =>
     Math.ceil((new Date(date) - new Date()) / 86400000);
 
 // Appel API centralisé avec gestion d'erreur
-const apiFetch = async (url, params = {}) => {
-    const query = new URLSearchParams(params).toString();
+const apiFetch = async (url, params = {}, method = 'GET', body = null) => {
+    const query = new URLSearchParams(method === 'GET' ? params : {}).toString();
     const fullUrl = `${API_BASE}${url}${query ? "?" + query : ""}`;
 
-    const res = await fetch(fullUrl, {
+    const options = {
+        method,
         headers: {
             "Accept":       "application/json",
             "Content-Type": "application/json",
             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')?.content ?? "",
         },
-    });
+    };
+
+    if (body) options.body = JSON.stringify(body);
+
+    const res = await fetch(fullUrl, options);
 
     if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
     return res.json();
@@ -47,37 +52,80 @@ function Badge({ cat }) {
 }
 
 // ─── Composant Card ───────────────────────────────────────
-function Card({ item, onClick }) {
+function Card({ item, onClick, isFavorited, onToggleFavorite }) {
     const jours = joursRestants(item.date_limite);
     const urgent = jours <= 14;
     return (
         <div
             onClick={() => onClick(item)}
             style={{
-                background: "#fff", borderRadius: 12, padding: 20,
-                cursor: "pointer", marginBottom: 14,
-                borderLeft: `4px solid ${CAT_COLORS[item.categorie] || "#999"}`,
+                background: "#fff", borderRadius: 12, padding: 18,
+                cursor: "pointer",
+                borderTop: `4px solid ${CAT_COLORS[item.categorie] || "#999"}`,
                 boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-                transition: "transform 0.15s",
+                transition: "transform 0.15s, box-shadow 0.15s",
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                position: "relative",
             }}
-            onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
-            onMouseLeave={e  => e.currentTarget.style.transform = "translateY(0)"}
+            onMouseEnter={e => {
+                e.currentTarget.style.transform = "translateY(-4px)";
+                e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.12)";
+            }}
+            onMouseLeave={e => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.06)";
+            }}
         >
-            <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
+            {/* Bouton Favori */}
+            <button 
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleFavorite(item.id);
+                }}
+                style={{
+                    position: "absolute",
+                    top: 10,
+                    right: 10,
+                    background: "none",
+                    border: "none",
+                    fontSize: "20px",
+                    cursor: "pointer",
+                    padding: "4px",
+                    transition: "transform 0.2s",
+                }}
+                onMouseEnter={e => e.currentTarget.style.transform = "scale(1.2)"}
+                onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
+                title={isFavorited ? "Retirer des favoris" : "Ajouter aux favoris"}
+            >
+                {isFavorited ? "❤️" : "🤍"}
+            </button>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8, marginBottom: 12, paddingRight: 20 }}>
                 <Badge cat={item.categorie} />
-                <span style={{ fontSize: 12, color: urgent ? "#ef4444" : COLORS.muted, fontWeight: urgent ? 700 : 400 }}>
-                    {urgent ? "⚠️ " : "📅 "}
-                    Limite : {new Date(item.date_limite).toLocaleDateString("fr-FR")}
-                    {urgent ? ` (${jours}j)` : ""}
+                <span style={{ fontSize: 11, color: urgent ? "#ef4444" : COLORS.muted, fontWeight: urgent ? 700 : 400, whiteSpace: "nowrap" }}>
+                    {urgent ? "⚠️" : "📅"}
                 </span>
             </div>
-            <h3 style={{ margin: "10px 0 6px", fontSize: 15, color: COLORS.dark }}>{item.titre}</h3>
-            <p style={{ margin: 0, fontSize: 13, color: COLORS.muted, lineHeight: 1.5 }}>
-                {item.description?.slice(0, 110)}...
+            <h3 style={{ margin: "0 0 8px", fontSize: 14, color: COLORS.dark, fontWeight: 700, lineHeight: 1.4 }}>{item.titre.slice(0, 50)}</h3>
+            <p style={{ margin: "0 0 12px", fontSize: 12, color: COLORS.muted, lineHeight: 1.5, flex: 1 }}>
+                {item.description?.slice(0, 80)}...
             </p>
-            <div style={{ marginTop: 10, fontSize: 12, color: COLORS.muted, display: "flex", gap: 12 }}>
-                <span>🌍 {item.pays}</span>
-                <span>📚 {item.domaine}</span>
+            <div style={{ fontSize: 11, color: COLORS.muted, display: "flex", flexDirection: "column", gap: 6 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    <span>🌍</span> <span>{item.pays}</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    <span>📚</span> <span>{item.domaine}</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 4 }}>
+                    <span>{urgent ? "⏰" : "📅"}</span>
+                    <span style={{ color: urgent ? "#ef4444" : COLORS.muted, fontWeight: urgent ? 600 : 400 }}>
+                        {new Date(item.date_limite).toLocaleDateString("fr-FR")}
+                        {urgent ? ` (${jours}j)` : ""}
+                    </span>
+                </div>
             </div>
         </div>
     );
@@ -203,12 +251,17 @@ export default function App() {
     const [loading, setLoading]           = useState(true);
     const [erreur, setErreur]             = useState(null);
     const [selected, setSelected]         = useState(null);
+    const [currentPage, setCurrentPage]   = useState(1);
+    const [favoris, setFavoris]           = useState(new Set());
+    const [user, setUser]                 = useState(null);
+    const ITEMS_PER_PAGE = 10;
 
     // Charger les opportunités depuis l'API Laravel
     useEffect(() => {
         const charger = async () => {
             setLoading(true);
             setErreur(null);
+            setCurrentPage(1); // Réinitialiser la page
             try {
                 const params = {};
                 if (cat !== "Toutes") params.categorie = cat;
@@ -232,6 +285,40 @@ export default function App() {
             .then(data => setStats(data.data ?? {}))
             .catch(() => {});
     }, []);
+
+    // Charger les favoris de l'utilisateur
+    useEffect(() => {
+        const chargerFavoris = async () => {
+            try {
+                const data = await apiFetch("/favoris");
+                const favorisIds = new Set(data.data?.map(opp => opp.id) || []);
+                setFavoris(favorisIds);
+            } catch {
+                // Pas d'erreur à afficher, l'utilisateur peut continuer
+                setFavoris(new Set());
+            }
+        };
+        chargerFavoris();
+    }, []);
+
+    // Basculer le statut favori d'une opportunité
+    const toggleFavorite = async (opportuniteId) => {
+        try {
+            const response = await apiFetch(`/favoris/${opportuniteId}`, {}, 'POST');
+            
+            setFavoris(prev => {
+                const newFavoris = new Set(prev);
+                if (response.favorited) {
+                    newFavoris.add(opportuniteId);
+                } else {
+                    newFavoris.delete(opportuniteId);
+                }
+                return newFavoris;
+            });
+        } catch (err) {
+            console.error("Erreur toggle favori:", err);
+        }
+    };
 
     return (
         <div style={{ minHeight: "100vh", background: COLORS.bg, fontFamily: "'Segoe UI', sans-serif" }}>
@@ -386,13 +473,94 @@ export default function App() {
                                 Aucune opportunité trouvée.
                             </div>
                         ) : (
-                            opportunites.map(item => (
-                                <Card key={item.id} item={item} onClick={setSelected} />
-                            ))
+                            <>
+                                <div style={{
+                                    display: "grid",
+                                    gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                                    gap: "20px",
+                                    marginBottom: 24
+                                }}>
+                                    {opportunites.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE).map(item => (
+                                        <Card 
+                                            key={item.id} 
+                                            item={item} 
+                                            onClick={setSelected}
+                                            isFavorited={favoris.has(item.id)}
+                                            onToggleFavorite={toggleFavorite}
+                                        />
+                                    ))}
+                                </div>
+                                
+                                {/* Pagination */}
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 24, padding: "16px 0", borderTop: "1px solid #e2e8f0" }}>
+                                    <div style={{ fontSize: 13, color: COLORS.muted }}>
+                                        Page {currentPage} sur {Math.ceil(opportunites.length / ITEMS_PER_PAGE)}
+                                    </div>
+                                    <div style={{ display: "flex", gap: 8 }}>
+                                        <button 
+                                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                            disabled={currentPage === 1}
+                                            style={{
+                                                padding: "8px 16px", borderRadius: 8, border: "1px solid #e2e8f0",
+                                                background: currentPage === 1 ? "#f8fafc" : "#fff",
+                                                color: currentPage === 1 ? COLORS.muted : "#1a3a5c",
+                                                cursor: currentPage === 1 ? "not-allowed" : "pointer",
+                                                fontWeight: 600, fontSize: 13,
+                                                transition: "all 0.2s",
+                                            }}>
+                                            ← Précédent
+                                        </button>
+                                        <button 
+                                            onClick={() => setCurrentPage(p => Math.min(Math.ceil(opportunites.length / ITEMS_PER_PAGE), p + 1))}
+                                            disabled={currentPage >= Math.ceil(opportunites.length / ITEMS_PER_PAGE)}
+                                            style={{
+                                                padding: "8px 16px", borderRadius: 8, border: "1px solid #e2e8f0",
+                                                background: currentPage >= Math.ceil(opportunites.length / ITEMS_PER_PAGE) ? "#f8fafc" : COLORS.primary,
+                                                color: currentPage >= Math.ceil(opportunites.length / ITEMS_PER_PAGE) ? COLORS.muted : "#fff",
+                                                cursor: currentPage >= Math.ceil(opportunites.length / ITEMS_PER_PAGE) ? "not-allowed" : "pointer",
+                                                fontWeight: 600, fontSize: 13,
+                                                transition: "all 0.2s",
+                                            }}>
+                                            Suivant →
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
                         )}
                     </>
                 )}
             </div>
+
+            {/* Footer */}
+            <footer style={{
+                background: "rgba(0,0,0,0.6)", 
+                borderTop: "2px solid rgba(201,169,97,0.15)",
+                padding: "32px 40px", 
+                display: "flex", 
+                justifyContent: "space-between",
+                alignItems: "center", 
+                flexWrap: "wrap", 
+                gap: "12px",
+                marginTop: "0px",
+                color: "#fff",
+                fontSize: "13px"
+            }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "16px", fontWeight: "800" }}>
+                    <div style={{
+                        width: "28px", 
+                        height: "28px", 
+                        borderRadius: "6px",
+                        background: "linear-gradient(135deg, #1a3a5c, #009A44)",
+                        display: "flex", 
+                        alignItems: "center", 
+                        justifyContent: "center",
+                        fontSize: "14px"
+                    }}>🔬</div>
+                    VeilleSci<span style={{ color: "#c9a961" }}>BF</span>
+                </div>
+                <p style={{ margin: 0, color: "#8b92a0" }}>© 2026 VeilleSci Burkina — Tous droits réservés</p>
+                <p style={{ margin: 0, color: "#4ade80" }}> Burkina Faso</p>
+            </footer>
 
             <Modal item={selected} onClose={() => setSelected(null)} />
             <AIAssistant />

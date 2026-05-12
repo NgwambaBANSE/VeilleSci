@@ -8,18 +8,18 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --green:  #009A44;
-            --red:    #EF2B2D;
-            --dark:   #0f172a;
-            --darker: #1e293b;
-            --white:  #ffffff;
-            --gray:   #94a3b8;
-            --light:  #f1f5f9;
+            --primary: #2c5282;
+            --accent:  #c9a961;
+            --dark:    #1a2332;
+            --darker:  #0f1419;
+            --white:   #ffffff;
+            --gray:    #8b92a0;
+            --light:   #f8fafb;
         }
 
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
-            background: var(--dark);
+            background: var(--darker);
             color: var(--white);
             overflow-x: hidden;
         }
@@ -29,19 +29,19 @@
             position: fixed; top: 0; left: 0; right: 0; z-index: 100;
             display: flex; align-items: center; justify-content: space-between;
             padding: 16px 40px;
-            background: rgba(15,23,42,0.85);
+            background: rgba(10,15,25,0.9);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 2px solid rgba(201,169,97,0.15);
         }
         .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; }
-        .logo-icon { background: var(--green); border-radius: 10px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .logo-icon { background: var(--primary); border-radius: 10px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
         .nav-links { display: flex; gap: 32px; }
         .nav-links a { color: var(--gray); text-decoration: none; font-size: 14px; transition: color .2s; }
-        .nav-links a:hover { color: var(--white); }
+        .nav-links a:hover { color: var(--accent); }
         .btn-nav {
-            background: var(--green); color: #fff; border: none; border-radius: 8px;
+            background: var(--primary); color: #fff; border: none; border-radius: 8px;
             padding: 10px 22px; font-size: 14px; font-weight: 700; cursor: pointer;
-            text-decoration: none; transition: opacity .2s;
+            text-decoration: none; transition: opacity .2s; box-shadow: 0 4px 12px rgba(44,82,130,0.25);
         }
         .btn-nav:hover { opacity: 0.85; }
 
@@ -53,24 +53,25 @@
             padding: 120px 24px 80px;
             position: relative;
             overflow: hidden;
+            background: linear-gradient(135deg, rgba(10,15,25,1) 0%, rgba(44,82,130,0.05) 50%, rgba(10,15,25,1) 100%);
         }
         .hero::before {
             content: '';
             position: absolute; inset: 0;
-            background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,154,68,0.18) 0%, transparent 70%),
-                        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(239,43,45,0.10) 0%, transparent 70%);
+            background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(44,82,130,0.12) 0%, transparent 70%),
+                        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(201,169,97,0.08) 0%, transparent 70%);
         }
         .hero-badge {
             display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(0,154,68,0.15); border: 1px solid rgba(0,154,68,0.4);
-            color: #4ade80; border-radius: 999px; padding: 6px 16px; font-size: 13px;
+            background: rgba(44,82,130,0.12); border: 1.5px solid rgba(201,169,97,0.35);
+            color: #a8d5ff; border-radius: 999px; padding: 8px 18px; font-size: 13px;
             font-weight: 600; margin-bottom: 28px;
         }
         .hero h1 {
             font-size: clamp(32px, 6vw, 64px);
             font-weight: 900; line-height: 1.1;
             margin-bottom: 24px;
-            background: linear-gradient(135deg, #fff 40%, #4ade80);
+            background: linear-gradient(135deg, #ffffff 30%, #c9a961 70%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .hero p {
@@ -79,62 +80,72 @@
         }
         .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
         .btn-primary {
-            background: var(--green); color: #fff; border: none; border-radius: 10px;
+            background: var(--primary); color: #fff; border: none; border-radius: 10px;
             padding: 14px 30px; font-size: 15px; font-weight: 700; cursor: pointer;
             text-decoration: none; transition: transform .2s, box-shadow .2s;
-            box-shadow: 0 0 24px rgba(0,154,68,0.4);
+            box-shadow: 0 8px 24px rgba(44,82,130,0.35);
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 36px rgba(0,154,68,0.55); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(44,82,130,0.45); }
         .btn-outline {
             background: transparent; color: #fff;
-            border: 1.5px solid rgba(255,255,255,0.25);
+            border: 1.5px solid rgba(201,169,97,0.4);
             border-radius: 10px; padding: 14px 30px; font-size: 15px; font-weight: 600;
-            cursor: pointer; text-decoration: none; transition: border-color .2s, background .2s;
+            cursor: pointer; text-decoration: none; transition: border-color .2s, background .2s, color .2s;
         }
-        .btn-outline:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.05); }
+        .btn-outline:hover { border-color: var(--accent); background: rgba(201,169,97,0.08); color: var(--accent); }
 
         /* ─── STATS ─── */
         .stats-bar {
             display: flex; justify-content: center; flex-wrap: wrap; gap: 0;
-            background: rgba(255,255,255,0.04); border-top: 1px solid rgba(255,255,255,0.08);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.02); border-top: 2px solid rgba(201,169,97,0.1);
+            border-bottom: 2px solid rgba(201,169,97,0.1);
         }
         .stat-item {
             flex: 1; min-width: 160px; text-align: center;
             padding: 32px 16px;
-            border-right: 1px solid rgba(255,255,255,0.08);
+            border-right: 1px solid rgba(255,255,255,0.06);
         }
         .stat-item:last-child { border-right: none; }
-        .stat-num { font-size: 36px; font-weight: 900; color: var(--green); }
+        .stat-num { font-size: 36px; font-weight: 900; color: var(--accent); }
         .stat-label { font-size: 13px; color: var(--gray); margin-top: 4px; }
 
         /* ─── CATÉGORIES ─── */
         .section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
-        .section-label { color: var(--green); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+        .section-label { color: var(--accent); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
         .section-title { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 16px; }
         .section-sub { color: var(--gray); font-size: 16px; line-height: 1.7; max-width: 560px; }
+
+        .section.centered { text-align: center; }
+        .section.centered .section-label { display: inline-block; }
+        .section.centered .section-sub { margin-left: auto; margin-right: auto; }
+
+        /* Couleurs spécifiques par section */
+        .section-categories .section-title { background: linear-gradient(135deg, #ffffff 0%, var(--primary) 50%, #a8d5ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .section-features .section-title { color: var(--accent); }
+        .section-cta .section-title { background: linear-gradient(135deg, #ffffff 40%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         .categories-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 48px;
         }
         .cat-card {
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(44,82,130,0.08); border: 1px solid rgba(44,82,130,0.2);
             border-radius: 16px; padding: 28px 20px; text-align: center;
-            transition: transform .2s, border-color .2s, background .2s; cursor: pointer;
+            transition: transform .2s, border-color .2s, background .2s, box-shadow .2s; cursor: pointer;
             text-decoration: none; color: var(--white);
         }
-        .cat-card:hover { transform: translateY(-4px); border-color: rgba(0,154,68,0.5); background: rgba(0,154,68,0.08); }
+        .cat-card:hover { transform: translateY(-4px); border-color: var(--accent); background: rgba(44,82,130,0.12); box-shadow: 0 8px 24px rgba(44,82,130,0.2); }
         .cat-icon { font-size: 36px; margin-bottom: 12px; }
         .cat-name { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
         .cat-desc { font-size: 13px; color: var(--gray); line-height: 1.5; }
 
         /* ─── FEATURES ─── */
-        .features-bg { background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .features-bg { background: linear-gradient(180deg, rgba(44,82,130,0.05) 0%, rgba(10,15,25,1) 100%); border-top: 2px solid rgba(201,169,97,0.1); border-bottom: 2px solid rgba(201,169,97,0.1); }
         .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-top: 48px; }
         .feature-card {
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px; padding: 28px;
+            background: rgba(44,82,130,0.08); border: 1px solid rgba(44,82,130,0.15);
+            border-radius: 16px; padding: 28px; transition: border-color .2s, box-shadow .2s;
         }
+        .feature-card:hover { border-color: var(--accent); box-shadow: 0 8px 24px rgba(44,82,130,0.15); }
         .feature-icon { font-size: 28px; margin-bottom: 16px; }
         .feature-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
         .feature-desc { font-size: 14px; color: var(--gray); line-height: 1.6; }
@@ -142,14 +153,16 @@
         /* ─── CTA FINAL ─── */
         .cta-section {
             text-align: center; padding: 100px 24px;
-            background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,154,68,0.15) 0%, transparent 70%);
+            background: linear-gradient(135deg, rgba(10,15,25,1) 0%, rgba(44,82,130,0.08) 50%, rgba(10,15,25,1) 100%);
+            border-top: 2px solid rgba(201,169,97,0.1);
+            border-bottom: 2px solid rgba(201,169,97,0.1);
         }
-        .cta-section h2 { font-size: clamp(26px, 4vw, 44px); font-weight: 900; margin-bottom: 16px; }
+        .cta-section h2 { font-size: clamp(26px, 4vw, 44px); font-weight: 900; margin-bottom: 16px; background: linear-gradient(135deg, #ffffff 40%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .cta-section p { color: var(--gray); font-size: 16px; margin-bottom: 36px; }
 
         /* ─── FOOTER ─── */
         footer {
-            background: rgba(0,0,0,0.4); border-top: 1px solid rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.6); border-top: 2px solid rgba(201,169,97,0.15);
             padding: 32px 40px; display: flex; justify-content: space-between;
             align-items: center; flex-wrap: wrap; gap: 12px;
         }
@@ -167,7 +180,7 @@
 <nav>
     <div class="logo">
         <div class="logo-icon">🔬</div>
-        VeilleSci<span style="color:var(--green)">BF</span>
+        VeilleSci<span style="color:var(--accent)">BF</span>
     </div>
     <div class="nav-links">
         <a href="#categories">Catégories</a>
@@ -216,7 +229,7 @@
 </div>
 
 <!-- CATÉGORIES -->
-<section class="section" id="categories">
+<section class="section centered" id="categories">
     <div class="section-label">Ce que vous trouverez</div>
     <h2 class="section-title">Toutes vos opportunités,<br/>au même endroit</h2>
     <p class="section-sub">Explorez les 5 grandes catégories de la veille scientifique sélectionnées pour les chercheurs africains.</p>
@@ -252,7 +265,7 @@
 
 <!-- FONCTIONNALITÉS -->
 <div class="features-bg" id="fonctionnalites">
-    <section class="section">
+    <section class="section centered">
         <div class="section-label">Fonctionnalités</div>
         <h2 class="section-title">Conçu pour vous<br/>faire gagner du temps</h2>
         <p class="section-sub">Des outils simples et puissants pour ne rater aucune opportunité.</p>
@@ -308,7 +321,7 @@
         VeilleSci<span style="color:var(--green)">BF</span>
     </div>
     <p>© {{ date('Y') }} VeilleSci Burkina — Tous droits réservés</p>
-    <p style="color:#4ade80;">🇧🇫 Fait avec ❤️ au Burkina Faso</p>
+    <p style="color:#4ade80;"> Burkina Faso</p>
 </footer>
 
 </body>

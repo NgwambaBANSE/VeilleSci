@@ -2,12 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Page d'accueil (Blade)
+// ── 1. Page d'accueil (publique) ──────────────────────────
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Application React (tout le reste)
-Route::get('/{any}', function () {
+// ── 2. Routes Breeze (login, register, etc.) ──────────────
+require __DIR__.'/auth.php';
+
+// ── 3. Page application React (privée) ───────────────────
+Route::middleware('auth')->get('/app', function () {
     return view('app');
-})->where('any', '^(?!api).*$'); // Exclure les routes API
+});

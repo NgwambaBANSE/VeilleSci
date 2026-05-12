@@ -29,4 +29,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the user's favorite opportunities.
+     */
+    public function favoris()
+    {
+        return $this->hasMany(Favori::class);
+    }
 }

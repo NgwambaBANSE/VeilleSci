@@ -24,4 +24,12 @@ class Opportunite extends Model
         'date_limite' => 'date',
         'active'      => 'boolean',
     ];
+
+    /**
+     * Get the favoris for this opportunity.
+     */
+    public function favoris()
+    {
+        return $this->hasMany(Favori::class);
+    }
 }
