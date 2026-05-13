@@ -357,27 +357,27 @@
             <p class="section-sub">5 catégories soigneusement sélectionnées pour répondre aux besoins des chercheurs africains.</p>
         </div>
         <div class="cat-grid">
-            <a href="{{ auth()->check() ? '/app' : '/login' }}" class="cat-card">
+            <a href="/app" class="cat-card">
                 <div class="cat-icon">📄</div>
                 <div class="cat-name">Publications</div>
                 <div class="cat-desc">Appels à articles dans des revues scientifiques indexées</div>
             </a>
-            <a href="{{ auth()->check() ? '/app' : '/login' }}" class="cat-card">
+            <a href="/app" class="cat-card">
                 <div class="cat-icon">🎤</div>
                 <div class="cat-name">Conférences</div>
                 <div class="cat-desc">Événements scientifiques nationaux et internationaux</div>
             </a>
-            <a href="{{ auth()->check() ? '/app' : '/login' }}" class="cat-card">
+            <a href="/app" class="cat-card">
                 <div class="cat-icon">🎓</div>
                 <div class="cat-name">Bourses</div>
                 <div class="cat-desc">Bourses de recherche, de mobilité et de financement doctoral</div>
             </a>
-            <a href="{{ auth()->check() ? '/app' : '/login' }}" class="cat-card">
+            <a href="/app" class="cat-card">
                 <div class="cat-icon">📚</div>
                 <div class="cat-name">Formations</div>
                 <div class="cat-desc">Renforcements de capacités, certifications et ateliers</div>
             </a>
-            <a href="{{ auth()->check() ? '/app' : '/login' }}" class="cat-card">
+            <a href="/app" class="cat-card">
                 <div class="cat-icon">🏢</div>
                 <div class="cat-name">Stages</div>
                 <div class="cat-desc">Stages de recherche dans des institutions de renom</div>

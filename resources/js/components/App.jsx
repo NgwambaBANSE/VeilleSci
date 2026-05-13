@@ -425,6 +425,65 @@ export default function App() {
             {/* ── CONTENU ────────────────────────────────── */}
             <div style={{ maxWidth: 960, margin: "0 auto", padding: "20px 16px 100px" }}>
 
+                {/* Message pour non-connectés */}
+                {!AppConfig.user && (
+                    <div style={{
+                        background: "linear-gradient(135deg, #e8f5ef 0%, #f0fdf4 100%)",
+                        border: "1.5px solid #86efac",
+                        borderRadius: 12,
+                        padding: "16px 20px",
+                        marginBottom: 24,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 14,
+                    }}>
+                        <span style={{ fontSize: 24 }}>🔒</span>
+                        <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: 14, fontWeight: 700, color: "#059669", marginBottom: 4 }}>
+                                Connectez-vous pour sauvegarder vos opportunités
+                            </div>
+                            <div style={{ fontSize: 13, color: "#047857", lineHeight: 1.5 }}>
+                                Créez un compte gratuit pour ajouter des favoris et retrouvez vos opportunités préférées lors de votre prochaine visite.
+                            </div>
+                        </div>
+                        <div style={{ display: "flex", gap: 8 }}>
+                            <a href="/login" style={{
+                                padding: "8px 16px",
+                                background: "#059669",
+                                color: "#fff",
+                                borderRadius: 6,
+                                textDecoration: "none",
+                                fontSize: 13,
+                                fontWeight: 600,
+                                transition: "background 0.2s",
+                                whiteSpace: "nowrap",
+                            }}
+                                onMouseEnter={e => e.currentTarget.style.background = "#047857"}
+                                onMouseLeave={e => e.currentTarget.style.background = "#059669"}
+                            >
+                                Se connecter
+                            </a>
+                            <a href="/register" style={{
+                                padding: "8px 16px",
+                                background: "#fff",
+                                color: "#059669",
+                                borderRadius: 6,
+                                textDecoration: "none",
+                                fontSize: 13,
+                                fontWeight: 600,
+                                border: "1.5px solid #86efac",
+                                transition: "background 0.2s",
+                                whiteSpace: "nowrap",
+                            }}
+                                onMouseEnter={e => e.currentTarget.style.background = "#f0fdf4"}
+                                onMouseLeave={e => e.currentTarget.style.background = "#fff"}
+                            >
+                                S'inscrire
+                            </a>
+                        </div>
+                    </div>
+                )}
+
                 {/* Stats */}
                 {Object.keys(stats).length > 0 && (
                     <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 20 }}>

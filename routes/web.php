@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 
 // ── Page d'accueil (publique) ─────────────────────────────
@@ -13,4 +14,15 @@ require __DIR__.'/auth.php';
 // ── Application React (PUBLIQUE — aucun middleware auth) ──
 Route::get('/app', function () {
     return view('app');      // Pas de ->middleware('auth') ici !
+});
+
+// ── Routes Admin (protégées) ──────────────────────────────
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/opportunites/create', [AdminDashboardController::class, 'create'])->name('admin.create');
+    Route::post('/admin/opportunites', [AdminDashboardController::class, 'store'])->name('admin.store');
+    Route::get('/admin/opportunites/{opportunite}/edit', [AdminDashboardController::class, 'edit'])->name('admin.edit');
+    Route::put('/admin/opportunites/{opportunite}', [AdminDashboardController::class, 'update'])->name('admin.update');
+    Route::delete('/admin/opportunites/{opportunite}', [AdminDashboardController::class, 'destroy'])->name('admin.destroy');
+    Route::post('/admin/opportunites/{opportunite}/toggle', [AdminDashboardController::class, 'toggle'])->name('admin.toggle');
 });
