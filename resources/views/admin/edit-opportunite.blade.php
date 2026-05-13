@@ -1,3 +1,12 @@
+@if(!Auth::check() || !Auth::user()->is_admin)
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f8f9fb;">
+        <div style="text-align: center; padding: 40px;">
+            <h1 style="color: #ef2b2d; margin-bottom: 20px;">🚫 Accès Refusé</h1>
+            <p style="color: #64748b; font-size: 16px; margin-bottom: 20px;">Seuls les administrateurs ont accès à cette zone.</p>
+            <a href="/app" style="display: inline-block; background: #1a3a5c; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;">← Retourner à l'application</a>
+        </div>
+    </div>
+@else
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -239,3 +248,4 @@
     </div>
 </body>
 </html>
+@endif

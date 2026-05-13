@@ -1,15 +1,4 @@
 <?php
-// Ouvrez ce fichier et trouvez la méthode store()
-// Remplacez la ligne de redirection par :
-
-// AVANT (généré par Breeze) :
-// return redirect()->intended(RouteServiceProvider::HOME);
-
-// APRÈS :
-// return redirect()->intended('/app');
-
-// ─────────────────────────────────────────────────────────
-// Fichier complet modifié :
 
 namespace App\Http\Controllers\Auth;
 
@@ -22,27 +11,43 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+    /**
+     * Display the login view.
+     */
     public function create(): View
     {
         return view('auth.login');
     }
 
+    /**
+     * Handle an incoming authentication request.
+     */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
         $request->session()->regenerate();
 
-        // ← Redirige vers /app après connexion
+        // Vérifier le rôle de l'utilisateur et rediriger en conséquence
+        $user = auth()->user();
+        
+        if ($user->is_admin) {
+            // Rediriger vers le tableau de bord admin
+            return redirect()->intended('/admin');
+        }
+
+        // Rediriger vers l'application pour les utilisateurs normaux
         return redirect()->intended('/app');
     }
 
+    /**
+     * Destroy an authenticated session.
+     */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // ← Redirige vers l'accueil après déconnexion
         return redirect('/');
     }
 }
