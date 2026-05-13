@@ -1,327 +1,489 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>VeilleSci Burkina — Portail de Veille Scientifique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --primary: #2c5282;
-            --accent:  #c9a961;
-            --dark:    #1a2332;
-            --darker:  #0f1419;
+            --navy:    #1a3a5c;
+            --navy2:   #0f2540;
+            --green:   #009A44;
+            --green2:  #007a35;
+            --red:     #EF2B2D;
+            --gold:    #c9a84c;
+            --light:   #f8f9fb;
+            --border:  #dde3ed;
+            --text:    #1e293b;
+            --muted:   #64748b;
             --white:   #ffffff;
-            --gray:    #8b92a0;
-            --light:   #f8fafb;
         }
 
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: var(--darker);
-            color: var(--white);
-            overflow-x: hidden;
-        }
+        body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--white); }
 
-        /* ─── NAVBAR ─── */
+        /* ── BARRE SUPÉRIEURE ─────────────────────────────── */
+        .topbar {
+            background: var(--navy2);
+            padding: 7px 0;
+            font-size: 12px;
+            color: rgba(255,255,255,0.65);
+        }
+        .topbar-inner {
+            max-width: 1200px; margin: 0 auto; padding: 0 32px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .topbar a { color: rgba(255,255,255,0.65); text-decoration: none; }
+        .topbar a:hover { color: #fff; }
+        .topbar-links { display: flex; gap: 20px; }
+
+        /* ── NAVBAR ───────────────────────────────────────── */
         nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+        }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto; padding: 0 32px;
             display: flex; align-items: center; justify-content: space-between;
-            padding: 16px 40px;
-            background: rgba(10,15,25,0.9);
-            backdrop-filter: blur(12px);
-            border-bottom: 2px solid rgba(201,169,97,0.15);
+            height: 68px;
         }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; }
-        .logo-icon { background: var(--primary); border-radius: 10px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-        .nav-links { display: flex; gap: 32px; }
-        .nav-links a { color: var(--gray); text-decoration: none; font-size: 14px; transition: color .2s; }
-        .nav-links a:hover { color: var(--accent); }
-        .btn-nav {
-            background: var(--primary); color: #fff; border: none; border-radius: 8px;
-            padding: 10px 22px; font-size: 14px; font-weight: 700; cursor: pointer;
-            text-decoration: none; transition: opacity .2s; box-shadow: 0 4px 12px rgba(44,82,130,0.25);
+        .logo {
+            display: flex; align-items: center; gap: 12px;
+            text-decoration: none; color: var(--navy);
         }
-        .btn-nav:hover { opacity: 0.85; }
-
-        /* ─── HERO ─── */
-        .hero {
-            min-height: 100vh;
+        .logo-emblem {
+            width: 44px; height: 44px; border-radius: 8px;
+            background: linear-gradient(135deg, var(--navy), var(--green));
             display: flex; align-items: center; justify-content: center;
-            text-align: center;
-            padding: 120px 24px 80px;
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, rgba(10,15,25,1) 0%, rgba(44,82,130,0.05) 50%, rgba(10,15,25,1) 100%);
+            font-size: 22px; flex-shrink: 0;
         }
-        .hero::before {
+        .logo-text { line-height: 1.2; }
+        .logo-title { font-family: 'Merriweather', serif; font-size: 18px; font-weight: 700; }
+        .logo-title span { color: var(--green); }
+        .logo-sub { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; }
+
+        .nav-links { display: flex; align-items: center; gap: 6px; }
+        .nav-link {
+            padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 500;
+            color: var(--muted); text-decoration: none; transition: all .2s;
+        }
+        .nav-link:hover { color: var(--navy); background: var(--light); }
+
+        .nav-divider { width: 1px; height: 28px; background: var(--border); margin: 0 6px; }
+
+        .btn-login {
+            padding: 8px 18px; border-radius: 6px; font-size: 14px; font-weight: 600;
+            color: var(--navy); text-decoration: none; border: 1.5px solid var(--border);
+            transition: all .2s;
+        }
+        .btn-login:hover { border-color: var(--navy); background: var(--light); }
+
+        .btn-register {
+            padding: 8px 18px; border-radius: 6px; font-size: 14px; font-weight: 600;
+            background: var(--green); color: #fff; text-decoration: none; border: none;
+            cursor: pointer; transition: background .2s;
+        }
+        .btn-register:hover { background: var(--green2); }
+
+        .btn-logout {
+            padding: 8px 18px; border-radius: 6px; font-size: 14px; font-weight: 600;
+            background: transparent; color: var(--red); border: 1.5px solid #fecaca;
+            cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif;
+        }
+        .btn-logout:hover { background: #fff5f5; border-color: var(--red); }
+
+        .btn-platform {
+            padding: 8px 18px; border-radius: 6px; font-size: 14px; font-weight: 600;
+            background: var(--navy); color: #fff; text-decoration: none; transition: background .2s;
+        }
+        .btn-platform:hover { background: var(--navy2); }
+
+        .user-chip {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--light); border-radius: 20px;
+            padding: 5px 14px 5px 8px; font-size: 13px; color: var(--navy); font-weight: 500;
+        }
+        .user-avatar {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: var(--navy); color: #fff;
+            display: flex; align-items: center; justify-content: center; font-size: 13px;
+        }
+
+        /* ── HERO ─────────────────────────────────────────── */
+        .hero {
+            background: linear-gradient(160deg, var(--navy2) 0%, var(--navy) 60%, #1d5c3a 100%);
+            padding: 80px 32px 90px; text-align: center; position: relative; overflow: hidden;
+        }
+        .hero::after {
             content: '';
             position: absolute; inset: 0;
-            background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(44,82,130,0.12) 0%, transparent 70%),
-                        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(201,169,97,0.08) 0%, transparent 70%);
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
+        .hero-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+
         .hero-badge {
             display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(44,82,130,0.12); border: 1.5px solid rgba(201,169,97,0.35);
-            color: #a8d5ff; border-radius: 999px; padding: 8px 18px; font-size: 13px;
-            font-weight: 600; margin-bottom: 28px;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.9); border-radius: 4px;
+            padding: 5px 14px; font-size: 12px; font-weight: 600;
+            letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 28px;
         }
         .hero h1 {
-            font-size: clamp(32px, 6vw, 64px);
-            font-weight: 900; line-height: 1.1;
-            margin-bottom: 24px;
-            background: linear-gradient(135deg, #ffffff 30%, #c9a961 70%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-family: 'Merriweather', serif;
+            font-size: clamp(28px, 5vw, 52px);
+            font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 20px;
         }
+        .hero h1 span { color: #6ee7a0; }
         .hero p {
-            font-size: clamp(15px, 2vw, 19px);
-            color: var(--gray); line-height: 1.7; max-width: 580px; margin: 0 auto 40px;
+            font-size: clamp(15px, 2vw, 18px); color: rgba(255,255,255,0.75);
+            line-height: 1.8; max-width: 600px; margin: 0 auto 36px;
         }
         .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-        .btn-primary {
-            background: var(--primary); color: #fff; border: none; border-radius: 10px;
-            padding: 14px 30px; font-size: 15px; font-weight: 700; cursor: pointer;
-            text-decoration: none; transition: transform .2s, box-shadow .2s;
-            box-shadow: 0 8px 24px rgba(44,82,130,0.35);
+        .cta-primary {
+            padding: 14px 32px; background: var(--green); color: #fff;
+            border-radius: 6px; font-size: 15px; font-weight: 700;
+            text-decoration: none; transition: background .2s;
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(44,82,130,0.45); }
-        .btn-outline {
-            background: transparent; color: #fff;
-            border: 1.5px solid rgba(201,169,97,0.4);
-            border-radius: 10px; padding: 14px 30px; font-size: 15px; font-weight: 600;
-            cursor: pointer; text-decoration: none; transition: border-color .2s, background .2s, color .2s;
+        .cta-primary:hover { background: var(--green2); }
+        .cta-secondary {
+            padding: 14px 32px; background: rgba(255,255,255,0.1);
+            border: 1.5px solid rgba(255,255,255,0.3); color: #fff;
+            border-radius: 6px; font-size: 15px; font-weight: 600;
+            text-decoration: none; transition: all .2s;
         }
-        .btn-outline:hover { border-color: var(--accent); background: rgba(201,169,97,0.08); color: var(--accent); }
+        .cta-secondary:hover { background: rgba(255,255,255,0.18); }
 
-        /* ─── STATS ─── */
-        .stats-bar {
-            display: flex; justify-content: center; flex-wrap: wrap; gap: 0;
-            background: rgba(255,255,255,0.02); border-top: 2px solid rgba(201,169,97,0.1);
-            border-bottom: 2px solid rgba(201,169,97,0.1);
+        /* ── STATS ────────────────────────────────────────── */
+        .stats {
+            background: #fff; border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
         }
-        .stat-item {
-            flex: 1; min-width: 160px; text-align: center;
-            padding: 32px 16px;
-            border-right: 1px solid rgba(255,255,255,0.06);
+        .stats-inner {
+            max-width: 900px; margin: 0 auto;
+            display: flex; flex-wrap: wrap;
         }
-        .stat-item:last-child { border-right: none; }
-        .stat-num { font-size: 36px; font-weight: 900; color: var(--accent); }
-        .stat-label { font-size: 13px; color: var(--gray); margin-top: 4px; }
-
-        /* ─── CATÉGORIES ─── */
-        .section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
-        .section-label { color: var(--accent); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
-        .section-title { font-size: clamp(24px, 4vw, 40px); font-weight: 800; margin-bottom: 16px; }
-        .section-sub { color: var(--gray); font-size: 16px; line-height: 1.7; max-width: 560px; }
-
-        .section.centered { text-align: center; }
-        .section.centered .section-label { display: inline-block; }
-        .section.centered .section-sub { margin-left: auto; margin-right: auto; }
-
-        /* Couleurs spécifiques par section */
-        .section-categories .section-title { background: linear-gradient(135deg, #ffffff 0%, var(--primary) 50%, #a8d5ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .section-features .section-title { color: var(--accent); }
-        .section-cta .section-title { background: linear-gradient(135deg, #ffffff 40%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .categories-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 48px;
+        .stat {
+            flex: 1; min-width: 150px; padding: 28px 20px; text-align: center;
+            border-right: 1px solid var(--border);
         }
+        .stat:last-child { border-right: none; }
+        .stat-num {
+            font-family: 'Merriweather', serif;
+            font-size: 36px; font-weight: 900; color: var(--navy);
+        }
+        .stat-num span { color: var(--green); }
+        .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+        /* ── SECTIONS ─────────────────────────────────────── */
+        .section { padding: 72px 32px; }
+        .section-inner { max-width: 1100px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 52px; }
+        .section-tag {
+            display: inline-block; background: #e8f5ef; color: var(--green);
+            padding: 4px 14px; border-radius: 4px; font-size: 12px;
+            font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px;
+        }
+        .section-title {
+            font-family: 'Merriweather', serif;
+            font-size: clamp(22px, 3.5vw, 34px); font-weight: 700;
+            color: var(--navy); margin-bottom: 12px;
+        }
+        .section-sub { font-size: 16px; color: var(--muted); max-width: 560px; margin: 0 auto; line-height: 1.7; }
+
+        /* ── GRILLE CATÉGORIES ────────────────────────────── */
+        .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; }
         .cat-card {
-            background: rgba(44,82,130,0.08); border: 1px solid rgba(44,82,130,0.2);
-            border-radius: 16px; padding: 28px 20px; text-align: center;
-            transition: transform .2s, border-color .2s, background .2s, box-shadow .2s; cursor: pointer;
-            text-decoration: none; color: var(--white);
+            border: 1.5px solid var(--border); border-radius: 10px; padding: 28px 18px;
+            text-align: center; text-decoration: none; color: var(--text);
+            transition: all .2s; background: #fff;
         }
-        .cat-card:hover { transform: translateY(-4px); border-color: var(--accent); background: rgba(44,82,130,0.12); box-shadow: 0 8px 24px rgba(44,82,130,0.2); }
+        .cat-card:hover { border-color: var(--green); box-shadow: 0 4px 20px rgba(0,154,68,0.1); transform: translateY(-3px); }
         .cat-icon { font-size: 36px; margin-bottom: 12px; }
-        .cat-name { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-        .cat-desc { font-size: 13px; color: var(--gray); line-height: 1.5; }
+        .cat-name { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+        .cat-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
 
-        /* ─── FEATURES ─── */
-        .features-bg { background: linear-gradient(180deg, rgba(44,82,130,0.05) 0%, rgba(10,15,25,1) 100%); border-top: 2px solid rgba(201,169,97,0.1); border-bottom: 2px solid rgba(201,169,97,0.1); }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-top: 48px; }
-        .feature-card {
-            background: rgba(44,82,130,0.08); border: 1px solid rgba(44,82,130,0.15);
-            border-radius: 16px; padding: 28px; transition: border-color .2s, box-shadow .2s;
+        /* ── FEATURES ─────────────────────────────────────── */
+        .features-bg { background: var(--light); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .feat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 20px; }
+        .feat-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 28px; }
+        .feat-icon {
+            width: 44px; height: 44px; border-radius: 8px;
+            background: #e8f5ef; display: flex; align-items: center; justify-content: center;
+            font-size: 22px; margin-bottom: 16px;
         }
-        .feature-card:hover { border-color: var(--accent); box-shadow: 0 8px 24px rgba(44,82,130,0.15); }
-        .feature-icon { font-size: 28px; margin-bottom: 16px; }
-        .feature-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
-        .feature-desc { font-size: 14px; color: var(--gray); line-height: 1.6; }
+        .feat-title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+        .feat-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
 
-        /* ─── CTA FINAL ─── */
+        /* ── CTA BAS ──────────────────────────────────────── */
         .cta-section {
-            text-align: center; padding: 100px 24px;
-            background: linear-gradient(135deg, rgba(10,15,25,1) 0%, rgba(44,82,130,0.08) 50%, rgba(10,15,25,1) 100%);
-            border-top: 2px solid rgba(201,169,97,0.1);
-            border-bottom: 2px solid rgba(201,169,97,0.1);
+            background: linear-gradient(135deg, var(--navy2), var(--navy));
+            padding: 80px 32px; text-align: center;
         }
-        .cta-section h2 { font-size: clamp(26px, 4vw, 44px); font-weight: 900; margin-bottom: 16px; background: linear-gradient(135deg, #ffffff 40%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .cta-section p { color: var(--gray); font-size: 16px; margin-bottom: 36px; }
-
-        /* ─── FOOTER ─── */
-        footer {
-            background: rgba(0,0,0,0.6); border-top: 2px solid rgba(201,169,97,0.15);
-            padding: 32px 40px; display: flex; justify-content: space-between;
-            align-items: center; flex-wrap: wrap; gap: 12px;
+        .cta-section h2 {
+            font-family: 'Merriweather', serif;
+            font-size: clamp(22px, 4vw, 38px); font-weight: 700;
+            color: #fff; margin-bottom: 14px;
         }
-        footer .logo { font-size: 16px; }
-        footer p { color: var(--gray); font-size: 13px; }
+        .cta-section p { color: rgba(255,255,255,0.7); font-size: 16px; margin-bottom: 32px; }
 
-        /* Drapeau BF */
-        .flag { display: inline-flex; gap: 2px; margin-left: 6px; }
-        .flag span { width: 10px; height: 14px; border-radius: 2px; }
+        /* ── FOOTER ───────────────────────────────────────── */
+        footer { background: var(--navy2); color: rgba(255,255,255,0.55); }
+        .footer-main { max-width: 1200px; margin: 0 auto; padding: 48px 32px 32px; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; }
+        .footer-brand .logo-title { color: #fff; font-size: 20px; }
+        .footer-brand p { font-size: 13px; line-height: 1.8; margin-top: 12px; }
+        .footer-col h4 { color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 14px; }
+        .footer-col a { display: block; color: rgba(255,255,255,0.5); font-size: 13px; text-decoration: none; margin-bottom: 8px; }
+        .footer-col a:hover { color: #fff; }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            max-width: 1200px; margin: 0 auto; padding: 18px 32px;
+            display: flex; justify-content: space-between; font-size: 12px; flex-wrap: wrap; gap: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .topbar-links { display: none; }
+            .nav-link { display: none; }
+            .footer-main { grid-template-columns: 1fr; }
+            .stat { min-width: 120px; }
+        }
     </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav>
-    <div class="logo">
-        <div class="logo-icon">🔬</div>
-        VeilleSci<span style="color:var(--accent)">BF</span>
-    </div>
-    <div class="nav-links">
-        <a href="#categories">Catégories</a>
-        <a href="#fonctionnalites">Fonctionnalités</a>
-        <a href="#contact">Contact</a>
-    </div>
-    <a href="/app" class="btn-nav">Accéder à la plateforme →</a>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-    <div style="position:relative; z-index:1;">
-        <div class="hero-badge">
-            🇧🇫 Fait pour les chercheurs du Burkina Faso
+{{-- ── BARRE SUPÉRIEURE ────────────────────────────────── --}}
+<div class="topbar">
+    <div class="topbar-inner">
+        <span>🇧🇫 Portail National de Veille Scientifique — Burkina Faso</span>
+        <div class="topbar-links">
+            <a href="#">Contact</a>
+            <a href="#">À propos</a>
+            <a href="#">Guide d'utilisation</a>
         </div>
-        <h1>Votre portail de<br/>veille scientifique</h1>
-        <p>
-            Centralisez toutes vos opportunités de recherche — publications, conférences,
-            bourses, formations et stages — en un seul endroit. Avec un assistant IA pour vous guider.
-        </p>
-        <div class="hero-cta">
-            <a href="/app" class="btn-primary">🚀 Explorer les opportunités</a>
-            <a href="#fonctionnalites" class="btn-outline">En savoir plus</a>
-        </div>
-    </div>
-</section>
-
-<!-- STATS -->
-<div class="stats-bar">
-    <div class="stat-item">
-        <div class="stat-num">50+</div>
-        <div class="stat-label">Opportunités actives</div>
-    </div>
-    <div class="stat-item">
-        <div class="stat-num">5</div>
-        <div class="stat-label">Catégories couvertes</div>
-    </div>
-    <div class="stat-item">
-        <div class="stat-num">20+</div>
-        <div class="stat-label">Pays représentés</div>
-    </div>
-    <div class="stat-item">
-        <div class="stat-num">100%</div>
-        <div class="stat-label">Gratuit pour les chercheurs</div>
     </div>
 </div>
 
-<!-- CATÉGORIES -->
-<section class="section centered" id="categories">
-    <div class="section-label">Ce que vous trouverez</div>
-    <h2 class="section-title">Toutes vos opportunités,<br/>au même endroit</h2>
-    <p class="section-sub">Explorez les 5 grandes catégories de la veille scientifique sélectionnées pour les chercheurs africains.</p>
+{{-- ── NAVBAR ───────────────────────────────────────────── --}}
+<nav>
+    <div class="nav-inner">
+        <a href="/" class="logo">
+            <div class="logo-emblem">🔬</div>
+            <div class="logo-text">
+                <div class="logo-title">VeilleSci <span>BF</span></div>
+                <div class="logo-sub">Portail de Veille Scientifique</div>
+            </div>
+        </a>
 
-    <div class="categories-grid">
-        <a href="/app" class="cat-card">
-            <div class="cat-icon">📄</div>
-            <div class="cat-name">Publications</div>
-            <div class="cat-desc">Appels à articles dans des revues scientifiques indexées</div>
-        </a>
-        <a href="/app" class="cat-card">
-            <div class="cat-icon">🎤</div>
-            <div class="cat-name">Conférences</div>
-            <div class="cat-desc">Conférences internationales et nationales ouvertes aux chercheurs</div>
-        </a>
-        <a href="/app" class="cat-card">
-            <div class="cat-icon">🎓</div>
-            <div class="cat-name">Bourses</div>
-            <div class="cat-desc">Bourses de recherche, de mobilité et de financement de thèse</div>
-        </a>
-        <a href="/app" class="cat-card">
-            <div class="cat-icon">📚</div>
-            <div class="cat-name">Formations</div>
-            <div class="cat-desc">Formations courtes, certifications et renforcements de capacités</div>
-        </a>
-        <a href="/app" class="cat-card">
-            <div class="cat-icon">🏢</div>
-            <div class="cat-name">Stages</div>
-            <div class="cat-desc">Stages de recherche dans des institutions nationales et internationales</div>
-        </a>
+        <div class="nav-links">
+            <a href="#categories" class="nav-link">Catégories</a>
+            <a href="#fonctionnalites" class="nav-link">Fonctionnalités</a>
+            <a href="#" class="nav-link">À propos</a>
+
+            <div class="nav-divider"></div>
+
+            @auth
+                {{-- Utilisateur connecté --}}
+                <div class="user-chip">
+                    <div class="user-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
+                    {{ auth()->user()->name }}
+                </div>
+                <a href="/app" class="btn-platform">Tableau de bord</a>
+                <form method="POST" action="/logout" style="display:inline;">
+                    @csrf
+                    <button type="submit" class="btn-logout">Déconnexion</button>
+                </form>
+            @else
+                {{-- Visiteur --}}
+                <a href="/login"    class="btn-login">Se connecter</a>
+                <a href="/register" class="btn-register">Créer un compte</a>
+            @endauth
+        </div>
+    </div>
+</nav>
+
+{{-- ── HERO ─────────────────────────────────────────────── --}}
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-badge">🎓 Plateforme académique — Accès gratuit</div>
+        <h1>La veille scientifique<br/>au service des chercheurs<br/><span>burkinabè</span></h1>
+        <p>
+            Centralisez et suivez toutes vos opportunités de recherche —
+            publications, conférences, bourses, formations et stages —
+            en un seul portail fiable et actualisé.
+        </p>
+        <div class="hero-cta">
+            @auth
+                <a href="/app" class="cta-primary">📋 Accéder aux opportunités</a>
+            @else
+                <a href="/register" class="cta-primary">🚀 Créer un compte gratuit</a>
+                <a href="/login"    class="cta-secondary">Se connecter</a>
+            @endauth
+        </div>
     </div>
 </section>
 
-<!-- FONCTIONNALITÉS -->
-<div class="features-bg" id="fonctionnalites">
-    <section class="section centered">
-        <div class="section-label">Fonctionnalités</div>
-        <h2 class="section-title">Conçu pour vous<br/>faire gagner du temps</h2>
-        <p class="section-sub">Des outils simples et puissants pour ne rater aucune opportunité.</p>
+{{-- ── STATS ────────────────────────────────────────────── --}}
+<div class="stats">
+    <div class="stats-inner">
+        <div class="stat">
+            <div class="stat-num"><span>50</span>+</div>
+            <div class="stat-label">Opportunités actives</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num"><span>5</span></div>
+            <div class="stat-label">Catégories couvertes</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num"><span>20</span>+</div>
+            <div class="stat-label">Pays représentés</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num"><span>100</span>%</div>
+            <div class="stat-label">Gratuit pour les chercheurs</div>
+        </div>
+    </div>
+</div>
 
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🔍</div>
-                <div class="feature-title">Recherche avancée</div>
-                <div class="feature-desc">Filtrez par catégorie, domaine, pays ou date limite pour trouver exactement ce que vous cherchez.</div>
+{{-- ── CATÉGORIES ───────────────────────────────────────── --}}
+<section class="section" id="categories">
+    <div class="section-inner">
+        <div class="section-header">
+            <div class="section-tag">Domaines couverts</div>
+            <h2 class="section-title">Toutes vos opportunités,<br/>au même endroit</h2>
+            <p class="section-sub">5 catégories soigneusement sélectionnées pour répondre aux besoins des chercheurs africains.</p>
+        </div>
+        <div class="cat-grid">
+            <a href="{{ auth()->check() ? '/app' : '/login' }}" class="cat-card">
+                <div class="cat-icon">📄</div>
+                <div class="cat-name">Publications</div>
+                <div class="cat-desc">Appels à articles dans des revues scientifiques indexées</div>
+            </a>
+            <a href="{{ auth()->check() ? '/app' : '/login' }}" class="cat-card">
+                <div class="cat-icon">🎤</div>
+                <div class="cat-name">Conférences</div>
+                <div class="cat-desc">Événements scientifiques nationaux et internationaux</div>
+            </a>
+            <a href="{{ auth()->check() ? '/app' : '/login' }}" class="cat-card">
+                <div class="cat-icon">🎓</div>
+                <div class="cat-name">Bourses</div>
+                <div class="cat-desc">Bourses de recherche, de mobilité et de financement doctoral</div>
+            </a>
+            <a href="{{ auth()->check() ? '/app' : '/login' }}" class="cat-card">
+                <div class="cat-icon">📚</div>
+                <div class="cat-name">Formations</div>
+                <div class="cat-desc">Renforcements de capacités, certifications et ateliers</div>
+            </a>
+            <a href="{{ auth()->check() ? '/app' : '/login' }}" class="cat-card">
+                <div class="cat-icon">🏢</div>
+                <div class="cat-name">Stages</div>
+                <div class="cat-desc">Stages de recherche dans des institutions de renom</div>
+            </a>
+        </div>
+    </div>
+</section>
+
+{{-- ── FONCTIONNALITÉS ──────────────────────────────────── --}}
+<div class="features-bg" id="fonctionnalites">
+    <section class="section">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-tag">Fonctionnalités</div>
+                <h2 class="section-title">Conçu pour vous faire<br/>gagner du temps</h2>
+                <p class="section-sub">Des outils simples et puissants pour ne rater aucune opportunité scientifique.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">⚠️</div>
-                <div class="feature-title">Alertes d'urgence</div>
-                <div class="feature-desc">Les opportunités dont la date limite approche (moins de 14 jours) sont signalées automatiquement.</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🤖</div>
-                <div class="feature-title">Assistant IA intégré</div>
-                <div class="feature-desc">Posez vos questions, obtenez de l'aide pour rédiger votre candidature ou lettre de motivation.</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📱</div>
-                <div class="feature-title">Interface responsive</div>
-                <div class="feature-desc">Accessible sur ordinateur, tablette et smartphone. Consultez partout, à tout moment.</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🌍</div>
-                <div class="feature-title">Couverture internationale</div>
-                <div class="feature-desc">Opportunités locales (Burkina Faso) et internationales pour maximiser vos chances.</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🔄</div>
-                <div class="feature-title">Mise à jour régulière</div>
-                <div class="feature-desc">Les données sont actualisées régulièrement par notre équipe pour garantir leur fraîcheur.</div>
+            <div class="feat-grid">
+                <div class="feat-card">
+                    <div class="feat-icon">🔍</div>
+                    <div class="feat-title">Recherche avancée</div>
+                    <div class="feat-desc">Filtrez par catégorie, domaine, pays ou date limite pour trouver exactement ce dont vous avez besoin.</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon">⚠️</div>
+                    <div class="feat-title">Alertes d'urgence</div>
+                    <div class="feat-desc">Les opportunités dont la date limite approche à moins de 14 jours sont signalées automatiquement.</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon">🤖</div>
+                    <div class="feat-title">Assistant IA intégré</div>
+                    <div class="feat-desc">Un assistant intelligent pour répondre à vos questions et vous aider à rédiger vos candidatures.</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon">📱</div>
+                    <div class="feat-title">Accessible partout</div>
+                    <div class="feat-desc">Interface responsive consultable sur ordinateur, tablette et smartphone.</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon">🌍</div>
+                    <div class="feat-title">Couverture internationale</div>
+                    <div class="feat-desc">Opportunités locales (Burkina Faso) et internationales pour maximiser vos chances de succès.</div>
+                </div>
+                <div class="feat-card">
+                    <div class="feat-icon">🔄</div>
+                    <div class="feat-title">Données actualisées</div>
+                    <div class="feat-desc">Notre équipe met à jour régulièrement la base de données pour garantir l'exactitude des informations.</div>
+                </div>
             </div>
         </div>
     </section>
 </div>
 
-<!-- CTA FINAL -->
-<div class="cta-section" id="contact">
-    <h2>Prêt à ne plus<br/>rater une opportunité ?</h2>
-    <p>Rejoignez des centaines de chercheurs burkinabè qui utilisent VeilleSci BF.</p>
-    <a href="/app" class="btn-primary" style="font-size:16px; padding: 16px 36px;">
-        🚀 Accéder à la plateforme gratuitement
-    </a>
+{{-- ── CTA FINAL ────────────────────────────────────────── --}}
+<div class="cta-section">
+    <h2>Prêt à booster<br/>votre carrière scientifique ?</h2>
+    <p>Rejoignez les chercheurs burkinabè qui ne ratent plus aucune opportunité.</p>
+    @auth
+        <a href="/app" class="cta-primary">📋 Voir les opportunités</a>
+    @else
+        <a href="/register" class="cta-primary" style="font-size:16px; padding:16px 40px;">
+            🚀 Créer un compte gratuitement
+        </a>
+    @endauth
 </div>
 
-<!-- FOOTER -->
+{{-- ── FOOTER ───────────────────────────────────────────── --}}
 <footer>
-    <div class="logo">
-        <div class="logo-icon" style="width:28px;height:28px;font-size:14px;">🔬</div>
-        VeilleSci<span style="color:var(--green)">BF</span>
+    <div class="footer-main">
+        <div class="footer-brand">
+            <div class="logo" style="text-decoration:none;">
+                <div class="logo-emblem" style="width:38px;height:38px;font-size:18px;">🔬</div>
+                <div class="logo-title" style="color:#fff; font-family:'Merriweather',serif; font-size:17px;">
+                    VeilleSci <span style="color:#6ee7a0;">BF</span>
+                </div>
+            </div>
+            <p>Portail national de veille scientifique dédié aux chercheurs et académiciens du Burkina Faso.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Navigation</h4>
+            <a href="/">Accueil</a>
+            <a href="#categories">Catégories</a>
+            <a href="#fonctionnalites">Fonctionnalités</a>
+            <a href="#">À propos</a>
+        </div>
+        <div class="footer-col">
+            <h4>Compte</h4>
+            @auth
+                <a href="/app">Tableau de bord</a>
+                <form method="POST" action="/logout" style="display:inline;">
+                    @csrf
+                    <button type="submit" style="background:none;border:none;color:rgba(255,255,255,0.5);font-size:13px;cursor:pointer;padding:0;margin-bottom:8px;display:block;">
+                        Déconnexion
+                    </button>
+                </form>
+            @else
+                <a href="/login">Se connecter</a>
+                <a href="/register">Créer un compte</a>
+            @endauth
+            <a href="#">Contact</a>
+        </div>
     </div>
-    <p>© {{ date('Y') }} VeilleSci Burkina — Tous droits réservés</p>
-    <p style="color:#4ade80;"> Burkina Faso</p>
+    <div class="footer-bottom">
+        <span>© {{ date('Y') }} VeilleSci Burkina — Tous droits réservés</span>
+        <span>🇧🇫 Fait avec ❤️ au Burkina Faso</span>
+    </div>
 </footer>
 
 </body>
