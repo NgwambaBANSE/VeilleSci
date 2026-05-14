@@ -38,4 +38,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Favori::class);
     }
+
+    public function profile()
+    {
+        return $this->hasOne(\App\Models\Profile::class);
+    }
 }

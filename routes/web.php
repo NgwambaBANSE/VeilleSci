@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // ── Page d'accueil (publique) ─────────────────────────────
@@ -14,6 +15,13 @@ require __DIR__.'/auth.php';
 // ── Application React (PUBLIQUE — aucun middleware auth) ──
 Route::get('/app', function () {
     return view('app');      // Pas de ->middleware('auth') ici !
+});
+
+// ── Routes Profil (protégées) ───────────────────────────────
+Route::middleware('auth')->group(function () {
+    Route::get('/profil', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profil/modifier', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 // ── Routes Admin (protégées) ──────────────────────────────

@@ -57,23 +57,28 @@ function AuthBar() {
             {user ? (
                 <>
                     {/* Chip utilisateur */}
-                    <div style={{
+                    <a href="/profil" style={{
                         display: "flex", alignItems: "center", gap: 8,
                         background: "rgba(255,255,255,0.1)", borderRadius: 20,
                         padding: "4px 12px 4px 6px",
-                    }}>
+                        textDecoration: "none", cursor: "pointer",
+                        transition: "background .2s",
+                    }}
+                        onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}
+                        onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"}
+                    >
                         <div style={{
                             width: 26, height: 26, borderRadius: "50%",
                             background: "#009A44", color: "#fff",
-                            fontSize: 12, fontWeight: 700,
+                            fontSize: 14, fontWeight: 700,
                             display: "flex", alignItems: "center", justifyContent: "center",
                         }}>
-                            {user.initial}
+                            👤
                         </div>
                         <span style={{ color: "rgba(255,255,255,0.9)", fontSize: 12, fontWeight: 500 }}>
                             {user.name}
                         </span>
-                    </div>
+                    </a>
 
                     {/* Bouton déconnexion */}
                     <form method="POST" action={logoutUrl} style={{ margin: 0 }}>
@@ -358,7 +363,7 @@ export default function App() {
                     display: "flex", justifyContent: "space-between", alignItems: "center",
                 }}>
                     <span style={{ color: "rgba(255,255,255,0.65)", fontSize: 12 }}>
-                        🇧🇫 Portail National de Veille Scientifique — Burkina Faso
+                        Portail National de Veille Scientifique — Burkina Faso
                     </span>
 
                     {/* ← Boutons connexion / déconnexion */}
@@ -387,7 +392,7 @@ export default function App() {
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "8px 14px", border: "1.5px solid #e2e8f0", borderRadius: 10, fontSize: 11, color: "#64748b", textAlign: "center", lineHeight: 1.4 }}>
                         <span style={{ fontSize: 18 }}>🎓</span>
                         <span style={{ fontWeight: 700, color: "#1a3a5c" }}>Accès libre</span>
-                        <span>Chercheurs BF</span>
+                        <span>Chercheurs</span>
                     </div>
                 </div>
 
