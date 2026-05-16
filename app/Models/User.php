@@ -43,4 +43,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\Profile::class);
     }
+    // ══════════════════════════════════════════════
+// À ajouter dans app/Models/User.php
+// ══════════════════════════════════════════════
+public function forumTopics() { return $this->hasMany(ForumTopic::class); }
+public function forumReplies() { return $this->hasMany(ForumReply::class); }
 }

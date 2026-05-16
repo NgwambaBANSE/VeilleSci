@@ -54,26 +54,33 @@ function AuthBar() {
     const { user, csrfToken, logoutUrl } = AppConfig;
     return (
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {/* Lien forum — toujours visible */}
+            <a href="/forum" style={{
+                color: "rgba(255,255,255,0.8)", fontSize: 12, fontWeight: 500,
+                textDecoration: "none", padding: "5px 12px", borderRadius: 6,
+                border: "1px solid rgba(255,255,255,0.2)", transition: "all .2s",
+            }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+            >
+                💬 Forum
+            </a>
+
             {user ? (
                 <>
                     {/* Chip utilisateur */}
                     <a href="/profil" style={{
                         display: "flex", alignItems: "center", gap: 8,
                         background: "rgba(255,255,255,0.1)", borderRadius: 20,
-                        padding: "4px 12px 4px 6px",
-                        textDecoration: "none", cursor: "pointer",
-                        transition: "background .2s",
-                    }}
-                        onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}
-                        onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"}
-                    >
+                        padding: "4px 12px 4px 6px", textDecoration: "none",
+                    }}>
                         <div style={{
                             width: 26, height: 26, borderRadius: "50%",
                             background: "#009A44", color: "#fff",
-                            fontSize: 14, fontWeight: 700,
+                            fontSize: 12, fontWeight: 700,
                             display: "flex", alignItems: "center", justifyContent: "center",
                         }}>
-                            👤
+                            {user.initial}
                         </div>
                         <span style={{ color: "rgba(255,255,255,0.9)", fontSize: 12, fontWeight: 500 }}>
                             {user.name}
@@ -363,7 +370,7 @@ export default function App() {
                     display: "flex", justifyContent: "space-between", alignItems: "center",
                 }}>
                     <span style={{ color: "rgba(255,255,255,0.65)", fontSize: 12 }}>
-                        Portail National de Veille Scientifique — Burkina Faso
+                        🇧🇫 Portail National de Veille Scientifique — Burkina Faso
                     </span>
 
                     {/* ← Boutons connexion / déconnexion */}
@@ -392,7 +399,7 @@ export default function App() {
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "8px 14px", border: "1.5px solid #e2e8f0", borderRadius: 10, fontSize: 11, color: "#64748b", textAlign: "center", lineHeight: 1.4 }}>
                         <span style={{ fontSize: 18 }}>🎓</span>
                         <span style={{ fontWeight: 700, color: "#1a3a5c" }}>Accès libre</span>
-                        <span>Chercheurs</span>
+                        <span>Chercheurs BF</span>
                     </div>
                 </div>
 
@@ -429,65 +436,6 @@ export default function App() {
 
             {/* ── CONTENU ────────────────────────────────── */}
             <div style={{ maxWidth: 960, margin: "0 auto", padding: "20px 16px 100px" }}>
-
-                {/* Message pour non-connectés */}
-                {!AppConfig.user && (
-                    <div style={{
-                        background: "linear-gradient(135deg, #e8f5ef 0%, #f0fdf4 100%)",
-                        border: "1.5px solid #86efac",
-                        borderRadius: 12,
-                        padding: "16px 20px",
-                        marginBottom: 24,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 14,
-                    }}>
-                        <span style={{ fontSize: 24 }}>🔒</span>
-                        <div style={{ flex: 1 }}>
-                            <div style={{ fontSize: 14, fontWeight: 700, color: "#059669", marginBottom: 4 }}>
-                                Connectez-vous pour sauvegarder vos opportunités
-                            </div>
-                            <div style={{ fontSize: 13, color: "#047857", lineHeight: 1.5 }}>
-                                Créez un compte gratuit pour ajouter des favoris et retrouvez vos opportunités préférées lors de votre prochaine visite.
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", gap: 8 }}>
-                            <a href="/login" style={{
-                                padding: "8px 16px",
-                                background: "#059669",
-                                color: "#fff",
-                                borderRadius: 6,
-                                textDecoration: "none",
-                                fontSize: 13,
-                                fontWeight: 600,
-                                transition: "background 0.2s",
-                                whiteSpace: "nowrap",
-                            }}
-                                onMouseEnter={e => e.currentTarget.style.background = "#047857"}
-                                onMouseLeave={e => e.currentTarget.style.background = "#059669"}
-                            >
-                                Se connecter
-                            </a>
-                            <a href="/register" style={{
-                                padding: "8px 16px",
-                                background: "#fff",
-                                color: "#059669",
-                                borderRadius: 6,
-                                textDecoration: "none",
-                                fontSize: 13,
-                                fontWeight: 600,
-                                border: "1.5px solid #86efac",
-                                transition: "background 0.2s",
-                                whiteSpace: "nowrap",
-                            }}
-                                onMouseEnter={e => e.currentTarget.style.background = "#f0fdf4"}
-                                onMouseLeave={e => e.currentTarget.style.background = "#fff"}
-                            >
-                                S'inscrire
-                            </a>
-                        </div>
-                    </div>
-                )}
 
                 {/* Stats */}
                 {Object.keys(stats).length > 0 && (

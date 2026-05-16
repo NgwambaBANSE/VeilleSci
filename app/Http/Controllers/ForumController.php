@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ForumSujet;
-use App\Models\ForumReponse;
+use App\Models\ForumTopic;
+use App\Models\ForumReply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,29 +12,33 @@ class ForumController extends Controller
     // ── Liste des sujets ──────────────────────────────────
     public function index(Request $request)
     {
-        $query = ForumSujet::with(['user', 'reponses'])
+        $query = ForumTopic::withCount('replies')
+            ->with('user')
             ->orderBy('epingle', 'desc')
             ->latest();
 
-        if ($request->filled('categorie')) {
+        if ($request->filled('categorie') && $request->categorie !== 'Toutes') {
             $query->where('categorie', $request->categorie);
         }
-        if ($request->filled('q')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('titre',   'like', '%'.$request->q.'%')
-                  ->orWhere('contenu','like', '%'.$request->q.'%');
-            });
+
+        if ($request->filled('search')) {
+            $s = $request->search;
+            $query->where(fn($q) =>
+                $q->where('titre',   'like', "%$s%")
+                  ->orWhere('contenu','like', "%$s%")
+            );
         }
 
-        $sujets = $query->paginate(15)->withQueryString();
-        $stats  = [
-            'total'    => ForumSujet::count(),
-            'resolus'  => ForumSujet::where('resolu', true)->count(),
-            'reponses' => ForumReponse::count(),
-            'membres'  => \App\Models\User::count(),
+        $topics = $query->paginate(15);
+
+        $stats = [
+            'total'   => ForumTopic::count(),
+            'resolus' => ForumTopic::where('resolu', true)->count(),
+            'replies' => ForumReply::count(),
+            'membres' => \App\Models\User::count(),
         ];
 
-        return view('forum.index', compact('sujets', 'stats'));
+        return view('forum.index', compact('topics', 'stats'));
     }
 
     // ── Formulaire nouveau sujet ──────────────────────────
@@ -43,80 +47,85 @@ class ForumController extends Controller
         return view('forum.create');
     }
 
-    // ── Enregistrer un sujet ──────────────────────────────
+    // ── Enregistrer le sujet ──────────────────────────────
     public function store(Request $request)
     {
         $request->validate([
             'titre'     => 'required|string|min:10|max:255',
             'contenu'   => 'required|string|min:20',
-            'categorie' => 'required|string',
+            'categorie' => 'required|in:Bourses,Publications,Conférences,Formations,Stages,Général,Méthodologie',
         ]);
 
-        $sujet = ForumSujet::create([
+        $topic = ForumTopic::create([
             'user_id'   => Auth::id(),
             'titre'     => $request->titre,
             'contenu'   => $request->contenu,
             'categorie' => $request->categorie,
         ]);
 
-        return redirect()->route('forum.show', $sujet)
-            ->with('success', 'Sujet publié avec succès !');
+        return redirect()->route('forum.show', $topic)
+            ->with('success', 'Votre sujet a été publié !');
     }
 
-    // ── Détail d'un sujet ─────────────────────────────────
-    public function show(ForumSujet $sujet)
+    // ── Afficher un sujet + réponses ──────────────────────
+    public function show(ForumTopic $forum)
     {
-        $sujet->incrementerVues();
-        $sujet->load(['user.profile', 'reponses.user.profile']);
-        return view('forum.show', compact('sujet'));
+        $forum->incrementVues();
+        $forum->load(['user.profile', 'replies.user.profile']);
+        return view('forum.show', compact('forum'));
     }
 
     // ── Poster une réponse ────────────────────────────────
-    public function repondre(Request $request, ForumSujet $sujet)
+    public function reply(Request $request, ForumTopic $forum)
     {
         $request->validate([
-            'contenu' => 'required|string|min:5',
+            'contenu' => 'required|string|min:10',
         ]);
 
-        ForumReponse::create([
-            'sujet_id' => $sujet->id,
-            'user_id'  => Auth::id(),
-            'contenu'  => $request->contenu,
+        ForumReply::create([
+            'user_id'        => Auth::id(),
+            'forum_topic_id' => $forum->id,
+            'contenu'        => $request->contenu,
         ]);
 
-        return redirect()->route('forum.show', $sujet)
-            ->with('success', 'Réponse publiée !');
+        return redirect()->route('forum.show', $forum)
+            ->with('success', 'Votre réponse a été publiée !');
     }
 
-    // ── Marquer comme meilleure réponse ──────────────────
-    public function meilleureReponse(ForumSujet $sujet, ForumReponse $reponse)
+    // ── Marquer comme résolu ──────────────────────────────
+    public function resoudre(ForumTopic $forum)
     {
-        abort_unless(Auth::id() === $sujet->user_id, 403);
+        abort_if(Auth::id() !== $forum->user_id, 403);
+        $forum->update(['resolu' => !$forum->resolu]);
+        return back()->with('success', $forum->resolu ? 'Sujet marqué comme résolu.' : 'Sujet réouvert.');
+    }
 
-        // Désactiver l'ancienne meilleure réponse
-        ForumReponse::where('sujet_id', $sujet->id)
-            ->update(['meilleure_reponse' => false]);
-
-        $reponse->update(['meilleure_reponse' => true]);
-        $sujet->update(['resolu' => true]);
-
+    // ── Marquer meilleure réponse ─────────────────────────
+    public function meilleureReponse(ForumReply $reply)
+    {
+        abort_if(Auth::id() !== $reply->topic->user_id, 403);
+        $reply->topic->replies()->update(['meilleure_reponse' => false]);
+        $reply->update(['meilleure_reponse' => true]);
+        $reply->topic->update(['resolu' => true]);
         return back()->with('success', 'Meilleure réponse sélectionnée !');
     }
 
-    // ── Supprimer un sujet (auteur ou admin) ──────────────
-    public function destroy(ForumSujet $sujet)
+    // ── Supprimer un sujet ────────────────────────────────
+    public function destroy(ForumTopic $forum)
     {
-        abort_unless(Auth::id() === $sujet->user_id, 403);
-        $sujet->delete();
+        abort_if(Auth::id() !== $forum->user_id, 403);
+        $forum->delete();
         return redirect()->route('forum.index')
             ->with('success', 'Sujet supprimé.');
     }
 
     // ── Supprimer une réponse ─────────────────────────────
-    public function supprimerReponse(ForumSujet $sujet, ForumReponse $reponse)
+    public function destroyReply(ForumReply $reply)
     {
-        abort_unless(Auth::id() === $reponse->user_id, 403);
-        $reponse->delete();
-        return back()->with('success', 'Réponse supprimée.');
+        abort_if(Auth::id() !== $reply->user_id, 403);
+        $topic = $reply->topic;
+        $reply->delete();
+        return redirect()->route('forum.show', $topic)
+            ->with('success', 'Réponse supprimée.');
     }
 }

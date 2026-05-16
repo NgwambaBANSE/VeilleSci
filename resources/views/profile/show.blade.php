@@ -126,6 +126,7 @@
     </a>
     <div class="nav-links">
         <a href="/app" class="btn-sm btn-outline">📋 Opportunités</a>
+        <a href="/forum" class="btn-sm btn-outline">💬 Forum</a>
         <a href="{{ route('profile.edit') }}" class="btn-sm btn-green">✏️ Modifier le profil</a>
         <form method="POST" action="/logout" style="margin:0;">
             @csrf
