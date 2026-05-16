@@ -2,16 +2,21 @@
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="/app">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                    </a>
-                </div>
+            <div class="flex items-center gap-4">
+                <!-- Brand -->
+                <a href="/" class="flex items-center gap-3 text-slate-950">
+                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-500 text-lg font-bold text-white shadow-lg">VS</span>
+                    <div class="hidden sm:block">
+                        <div class="font-bold text-lg">VeilleSci BF</div>
+                        <div class="text-xs text-slate-500">Portail de veille scientifique</div>
+                    </div>
+                </a>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('articles.index')" :active="request()->routeIs('articles.index')">
+                        {{ __('Articles') }}
+                    </x-nav-link>
                     <x-nav-link :href="'/app'" :active="request()->routeIs('/')">
                         {{ __('App') }}
                     </x-nav-link>
@@ -20,6 +25,7 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                @auth
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -38,7 +44,7 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
-                        @if(Auth::user() && Auth::user()->is_admin)
+                        @if(Auth::user()->is_admin)
                             <x-dropdown-link :href="route('admin.dashboard')">
                                 🔐 {{ __('Admin Dashboard') }}
                             </x-dropdown-link>
@@ -57,6 +63,12 @@
                         </form>
                     </x-slot>
                 </x-dropdown>
+                @else
+                <div class="flex items-center gap-4">
+                    <a href="{{ route('login') }}" class="text-gray-600 hover:text-gray-900">{{ __('Log In') }}</a>
+                    <a href="{{ route('register') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">{{ __('Register') }}</a>
+                </div>
+                @endauth
             </div>
 
             <!-- Hamburger -->
@@ -80,6 +92,7 @@
         </div>
 
         <!-- Responsive Settings Options -->
+        @auth
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
@@ -91,7 +104,7 @@
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 
-                @if(Auth::user() && Auth::user()->is_admin)
+                @if(Auth::user()->is_admin)
                     <x-responsive-nav-link :href="route('admin.dashboard')">
                         🔐 {{ __('Admin Dashboard') }}
                     </x-responsive-nav-link>
@@ -109,5 +122,11 @@
                 </form>
             </div>
         </div>
+        @else
+        <div class="pt-4 pb-1 border-t border-gray-200 px-4 space-y-3">
+            <a href="{{ route('login') }}" class="block text-gray-700 font-medium hover:text-gray-900">{{ __('Log In') }}</a>
+            <a href="{{ route('register') }}" class="block text-blue-600 font-medium hover:text-blue-800">{{ __('Register') }}</a>
+        </div>
+        @endauth
     </div>
 </nav>

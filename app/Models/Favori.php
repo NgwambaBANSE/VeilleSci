@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Favori extends Model
 {
-    protected $fillable = ['user_id', 'opportunite_id'];
+    protected $fillable = ['user_id', 'opportunite_id', 'article_id', 'type'];
 
     public function user(): BelongsTo
     {
@@ -17,5 +17,10 @@ class Favori extends Model
     public function opportunite(): BelongsTo
     {
         return $this->belongsTo(Opportunite::class);
+    }
+
+    public function article(): BelongsTo
+    {
+        return $this->belongsTo(Article::class);
     }
 }

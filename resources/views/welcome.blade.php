@@ -279,6 +279,7 @@
         </a>
 
         <div class="nav-links">
+            <a href="/articles" class="nav-link">📚 Articles</a>
             <a href="#categories" class="nav-link">Catégories</a>
             <a href="#fonctionnalites" class="nav-link">Fonctionnalités</a>
             <a href="/forum" class="nav-link">💬 Forum</a>
@@ -317,11 +318,11 @@
             en un seul portail fiable et actualisé.
         </p>
         <div class="hero-cta">
+            <a href="/articles" class="cta-primary">📚 Découvrir les articles</a>
             @auth
-                <a href="/app" class="cta-primary">📋 Accéder aux opportunités</a>
+                <a href="/app" class="cta-secondary">📋 Opportunités</a>
             @else
-                <a href="/register" class="cta-primary">🚀 Créer un compte gratuit</a>
-                <a href="/login"    class="cta-secondary">Se connecter</a>
+                <a href="/register" class="cta-secondary">🚀 Créer un compte</a>
             @endauth
         </div>
     </div>

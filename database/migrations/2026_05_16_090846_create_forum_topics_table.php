@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('forum_topics', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        // Cette migration est dupliquée, voir 2026_05_16_090004_create_forum_topics_table.php
+        // Rien à faire ici
     }
 
     /**
@@ -22,6 +20,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('forum_topics');
+        // Rien à faire
     }
 };

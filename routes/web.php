@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/opportunites/{opportunite}/toggle', [AdminDashboardController::class, 'toggle'])->name('admin.toggle');
 });
 
+// ── Articles Scientifiques — routes publiques ────────────
+Route::get('/articles',        [ArticleController::class, 'index'])->name('articles.index');
+Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
+
 // ── Forum — routes publiques ──────────────────────────────
 // ⚠️ /forum/nouveau DOIT être avant /forum/{forum}
 Route::get('/forum',         [ForumController::class, 'index'])->name('forum.index');
@@ -50,6 +55,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profil/modifier', [ProfileController::class, 'edit'])  ->name('profile.edit');
     Route::put('/profil',          [ProfileController::class, 'update'])->name('profile.update');
 
+    // Articles — favoris
+    Route::post('/articles/{article}/favori',    [ArticleController::class, 'addFavori'])    ->name('articles.favori.add');
+    Route::delete('/articles/{article}/favori',  [ArticleController::class, 'removeFavori'])  ->name('articles.favori.remove');
+
     // Forum — écriture
     Route::post  ('/forum',                          [ForumController::class, 'store'])            ->name('forum.store');
     Route::post  ('/forum/{forum}/repondre',         [ForumController::class, 'reply'])            ->name('forum.reply');
@@ -57,4 +66,9 @@ Route::middleware('auth')->group(function () {
     Route::post  ('/forum/reply/{reply}/meilleure',  [ForumController::class, 'meilleureReponse']) ->name('forum.meilleure');
     Route::delete('/forum/{forum}',                  [ForumController::class, 'destroy'])          ->name('forum.destroy');
     Route::delete('/forum/reply/{reply}',            [ForumController::class, 'destroyReply'])     ->name('forum.reply.destroy');
+});
+
+// ── Routes Admin — Articles ──────────────────────────────
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::post('/admin/articles/sync', [ArticleController::class, 'sync'])->name('articles.sync');
 });
