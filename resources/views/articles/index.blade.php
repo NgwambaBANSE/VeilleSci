@@ -87,9 +87,7 @@
         @endforelse
 
         {{-- Pagination --}}
-        <div class="art-pagination">
-            {{ $articles->links() }}
-        </div>
+        {{ $articles->links('components.pagination') }}
     </div>
 
     {{-- ── Sidebar ── --}}
