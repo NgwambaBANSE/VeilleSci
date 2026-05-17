@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ForumController;
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +14,10 @@ Route::get('/', function () {
 
 // ── Routes Breeze (login, register, logout...) ────────────
 require __DIR__.'/auth.php';
+
+// ── Routes OAuth Google ──────────────────────────────────
+Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 
 // ── Application React (PUBLIQUE — aucun middleware auth) ──
 Route::get('/app', function () {

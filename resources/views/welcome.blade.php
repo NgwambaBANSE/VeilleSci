@@ -261,7 +261,6 @@
         <span>🇧🇫 Portail National de Veille Scientifique — Burkina Faso</span>
         <div class="topbar-links">
             <a href="#">Contact</a>
-            <a href="#">À propos</a>
             <a href="#">Guide d'utilisation</a>
         </div>
     </div>
@@ -283,8 +282,6 @@
             <a href="#categories" class="nav-link">Catégories</a>
             <a href="#fonctionnalites" class="nav-link">Fonctionnalités</a>
             <a href="/forum" class="nav-link">💬 Forum</a>
-            <a href="#" class="nav-link">À propos</a>
-
             <div class="nav-divider"></div>
 
             @auth
@@ -293,7 +290,6 @@
                     <div class="user-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
                     {{ auth()->user()->name }}
                 </div>
-                <a href="/app" class="btn-platform">Tableau de bord</a>
                 <form method="POST" action="/logout" style="display:inline;">
                     @csrf
                     <button type="submit" class="btn-logout">Déconnexion</button>
@@ -464,7 +460,6 @@
             <a href="#categories">Catégories</a>
             <a href="#fonctionnalites">Fonctionnalités</a>
             <a href="/forum">Forum</a>
-            <a href="#">À propos</a>
         </div>
         <div class="footer-col">
             <h4>Compte</h4>

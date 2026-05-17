@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'crossref_email' => env('CROSSREF_EMAIL', 'contact@veillescibf.bf'),
+
 ];
