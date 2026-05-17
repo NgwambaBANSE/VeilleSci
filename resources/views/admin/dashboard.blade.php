@@ -305,7 +305,7 @@
                                         <div class="actions">
                                             <a href="{{ route('admin.edit', $opp) }}" class="btn-edit">✏️ Éditer</a>
 
-                                            <form method="POST" action="{{ route('admin.toggle', $opp) }}" style="display: inline;">
+                                            <form method="POST" action="{{ route('admin.toggle', $opp) }}" style="display: inline;" onsubmit="return confirm('{{ $opp->active ? 'Êtes-vous sûr de vouloir désactiver cette opportunité ?' : 'Êtes-vous sûr de vouloir activer cette opportunité ?' }}')">
                                                 @csrf
                                                 <button type="submit" class="btn-toggle">
                                                     {{ $opp->active ? '🔴 Désactiver' : '🟢 Activer' }}
