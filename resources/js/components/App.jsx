@@ -152,7 +152,8 @@ function Card({ item, onClick, isFavorited, onToggleFavorite }) {
                 boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
                 transition: "transform 0.15s, box-shadow 0.15s",
                 display: "flex", flexDirection: "column",
-                height: "100%", position: "relative",
+                position: "relative",
+                minHeight: 0,
             }}
             onMouseEnter={e => {
                 e.currentTarget.style.transform = "translateY(-4px)";
