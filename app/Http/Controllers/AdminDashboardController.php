@@ -95,8 +95,9 @@ class AdminDashboardController extends Controller
      */
     public function toggle(Opportunite $opportunite)
     {
-        $opportunite->update(['active' => !$opportunite->active]);
-        $opportunite->refresh();
-        return response()->json(['success' => true, 'active' => $opportunite->active]);
+        $newState = !$opportunite->active;
+        $opportunite->update(['active' => $newState]);
+        $message = $newState ? 'Opportunité activée !' : 'Opportunité désactivée !';
+        return redirect('/admin')->with('success', $message);
     }
 }
