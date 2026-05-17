@@ -50,9 +50,20 @@ class ArticleController extends Controller
             ->latest('date_publication')
             ->paginate(15);
 
-        $domaines = Article::distinct('domaine')->pluck('domaine');
+        $domaines = Article::where('active', true)
+            ->distinct('domaine')
+            ->pluck('domaine');
 
-        return view('articles.index', compact('articles', 'domaines'));
+        $stats = Article::where('active', true)
+            ->selectRaw('domaine, COUNT(*) as count')
+            ->groupBy('domaine')
+            ->pluck('count', 'domaine');
+
+        $resumeIaCount = Article::where('active', true)
+            ->whereNotNull('resume_ia')
+            ->count();
+
+        return view('articles.index', compact('articles', 'domaines', 'stats', 'resumeIaCount'));
     }
 
     /**
