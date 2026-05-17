@@ -12,7 +12,14 @@ class AdminDashboardController extends Controller
      */
     public function index()
     {
-        $opportunites = Opportunite::orderBy('created_at', 'desc')->get();
+        $allOpportunites = Opportunite::orderBy('created_at', 'desc')->get();
+
+        $categories = ["Publications", "Conférences", "Formations", "Stages", "Bourses"];
+        $opportunites = [];
+        foreach ($categories as $cat) {
+            $opportunites[$cat] = $allOpportunites->where('categorie', $cat)->values();
+        }
+
         $stats = [
             'total' => Opportunite::count(),
             'actives' => Opportunite::where('active', true)->count(),

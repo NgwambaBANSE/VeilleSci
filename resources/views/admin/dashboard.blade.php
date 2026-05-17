@@ -272,65 +272,60 @@
         </div>
 
         <!-- TABLE -->
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Titre</th>
-                        <th>Catégorie</th>
-                        <th>Domaine</th>
-                        <th>Pays</th>
-                        <th>Date limite</th>
-                        <th>Statut</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($opportunites as $opp)
-                        <tr>
-                            <td><strong>{{ substr($opp->titre, 0, 40) }}...</strong></td>
-                            <td>
-                                <span class="badge badge-blue">
-                                    {{ $opp->categorie }}
-                                </span>
-                            </td>
-                            <td>{{ $opp->domaine }}</td>
-                            <td>{{ $opp->pays }}</td>
-                            <td>{{ $opp->date_limite->format('d/m/Y') }}</td>
-                            <td>
-                                <span class="badge {{ $opp->active ? 'badge-green' : 'badge-red' }}">
-                                    {{ $opp->active ? '✅ Active' : '❌ Inactive' }}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="actions">
-                                    <a href="{{ route('admin.edit', $opp) }}" class="btn-edit">✏️ Éditer</a>
-                                    
-                                    <form method="POST" action="{{ route('admin.toggle', $opp) }}" style="display: inline;">
-                                        @csrf
-                                        <button type="submit" class="btn-toggle">
-                                            {{ $opp->active ? '🔴 Désactiver' : '🟢 Activer' }}
-                                        </button>
-                                    </form>
-                                    
-                                    <form method="POST" action="{{ route('admin.destroy', $opp) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr ?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-delete">🗑️ Supprimer</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" style="text-align: center; color: var(--muted); padding: 40px;">
-                                Aucune opportunité. <a href="{{ route('admin.create') }}">Créer la première →</a>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+        @foreach ($opportunites as $categorie => $opps)
+            @if ($opps->count() > 0)
+                <div class="table-container" style="margin-bottom: 32px;">
+                    <div style="background: var(--bg); padding: 16px 14px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--navy);">
+                        📁 {{ $categorie }} <span style="color: var(--muted); font-weight: 400;">({{ $opps->count() }})</span>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Domaine</th>
+                                <th>Pays</th>
+                                <th>Date limite</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($opps as $opp)
+                                <tr>
+                                    <td><strong>{{ substr($opp->titre, 0, 40) }}...</strong></td>
+                                    <td>{{ $opp->domaine }}</td>
+                                    <td>{{ $opp->pays }}</td>
+                                    <td>{{ $opp->date_limite->format('d/m/Y') }}</td>
+                                    <td>
+                                        <span class="badge {{ $opp->active ? 'badge-green' : 'badge-red' }}">
+                                            {{ $opp->active ? '✅ Active' : '❌ Inactive' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="actions">
+                                            <a href="{{ route('admin.edit', $opp) }}" class="btn-edit">✏️ Éditer</a>
+
+                                            <form method="POST" action="{{ route('admin.toggle', $opp) }}" style="display: inline;">
+                                                @csrf
+                                                <button type="submit" class="btn-toggle">
+                                                    {{ $opp->active ? '🔴 Désactiver' : '🟢 Activer' }}
+                                                </button>
+                                            </form>
+
+                                            <form method="POST" action="{{ route('admin.destroy', $opp) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr ?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn-delete">🗑️ Supprimer</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+        @endforeach
     </div>
 </body>
 </html>
