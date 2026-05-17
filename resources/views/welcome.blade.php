@@ -116,7 +116,9 @@
 
         /* ── HERO ─────────────────────────────────────────── */
         .hero {
-            background: linear-gradient(160deg, var(--navy2) 0%, var(--navy) 60%, #1d5c3a 100%);
+            background: linear-gradient(160deg, rgba(15, 37, 64, 0.92) 0%, rgba(26, 58, 92, 0.92) 60%, rgba(29, 92, 58, 0.92) 100%),
+                        url('https://images.unsplash.com/photo-1532634726093-8a32f803cbe0?w=1600&h=900&fit=crop') center/cover;
+            background-attachment: fixed;
             padding: 80px 32px 90px; text-align: center; position: relative; overflow: hidden;
         }
         .hero::after {
