@@ -1,9 +1,10 @@
 @if(!Auth::check() || !Auth::user()->is_admin)
-    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f8f9fb;">
-        <div style="text-align: center; padding: 40px;">
-            <h1 style="color: #ef2b2d; margin-bottom: 20px;">🚫 Accès Refusé</h1>
-            <p style="color: #64748b; font-size: 16px; margin-bottom: 20px;">Seuls les administrateurs ont accès à cette zone.</p>
-            <a href="/app" style="display: inline-block; background: #1a3a5c; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;">← Retourner à l'application</a>
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div style="text-align: center; padding: 60px 40px; background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            <h1 style="color: #ef2b2d; margin-bottom: 16px; font-size: 48px;">🚫</h1>
+            <h2 style="color: #1a3a5c; margin-bottom: 12px;">Accès Refusé</h2>
+            <p style="color: #64748b; font-size: 15px; margin-bottom: 24px; line-height: 1.6;">Seuls les administrateurs ont accès à cette zone.</p>
+            <a href="/app" style="display: inline-block; background: linear-gradient(135deg, #009A44 0%, #007a35 100%); color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,154,68,0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,154,68,0.2)'">← Retourner à l'application</a>
         </div>
     </div>
 @else
@@ -21,69 +22,121 @@
             --navy2: #0f2540;
             --green: #009A44;
             --red: #EF2B2D;
-            --border: #dde3ed;
-            --text: #1e293b;
-            --muted: #64748b;
-            --bg: #f8f9fb;
+            --border: #e5e7eb;
+            --text: #111827;
+            --muted: #6b7280;
+            --bg: #f9fafb;
+            --light: #f3f4f6;
         }
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--bg);
             color: var(--text);
+            line-height: 1.6;
         }
 
         /* ── NAVBAR ──────────────────────────────────── */
         .navbar {
-            background: var(--navy2);
+            background: linear-gradient(135deg, var(--navy2) 0%, #1a3a5c 100%);
             color: #fff;
-            padding: 16px 32px;
+            padding: 18px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
         }
-        .navbar-brand { font-size: 18px; font-weight: 700; }
-        .navbar-right { display: flex; gap: 20px; align-items: center; }
+        .navbar-brand {
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00d084 0%, var(--green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .navbar-right { display: flex; gap: 24px; align-items: center; }
         .navbar-right a {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.85);
             text-decoration: none;
-            transition: color 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
         }
         .navbar-right a:hover { color: #fff; }
         .btn-logout {
-            background: rgba(239,43,45,0.18);
-            border: 1px solid rgba(239,43,45,0.45);
+            background: rgba(239,43,45,0.15);
+            border: 1.5px solid rgba(239,43,45,0.3);
             color: #fca5a5;
-            border-radius: 6px;
-            padding: 8px 14px;
+            border-radius: 8px;
+            padding: 8px 16px;
             cursor: pointer;
             font-family: inherit;
-            transition: background 0.2s;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
         }
-        .btn-logout:hover { background: rgba(239,43,45,0.32); }
+        .btn-logout:hover {
+            background: rgba(239,43,45,0.25);
+            box-shadow: 0 4px 12px rgba(239,43,45,0.2);
+        }
 
         /* ── CONTAINER ───────────────────────────────── */
-        .container { max-width: 1200px; margin: 0 auto; padding: 32px; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 40px; }
 
-        /* ── MESSAGES ────────────────────────────────── */
+        /* ── MESSAGES ────────────────────────────────– */
         .alert {
-            border-radius: 8px;
-            padding: 14px 18px;
+            border-radius: 12px;
+            padding: 16px 20px;
             margin-bottom: 24px;
-            border: 1px solid;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .alert-success {
-            background: #e8f5ef;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
             color: #059669;
-            border-color: #86efac;
+            border-left: 4px solid #10b981;
         }
         .alert-error {
-            background: #fef2f2;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
             color: #dc2626;
-            border-color: #fecaca;
+            border-left: 4px solid #ef4444;
         }
 
-        /* ── HEADER ──────────────────────────────────── */
+        /* ── NAVIGATION ──────────────────────────────– */
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0;
+        }
+        .nav-tabs a {
+            padding: 14px 20px;
+            text-decoration: none;
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 15px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+            bottom: -2px;
+        }
+        .nav-tabs a:hover {
+            color: var(--text);
+        }
+        .nav-tabs a.active {
+            color: var(--green);
+            border-bottom-color: var(--green);
+        }
+
+        /* ── HEADER ──────────────────────────────────– */
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -91,116 +144,117 @@
             margin-bottom: 32px;
         }
         .page-title {
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 32px;
+            font-weight: 800;
             color: var(--navy);
+            letter-spacing: -0.5px;
         }
 
-        /* ── STATS ───────────────────────────────────── */
+        /* ── STATS GRID ──────────────────────────────– */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
         }
         .stat-card {
-            background: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.06);
-            border-left: 4px solid var(--green);
+            background: linear-gradient(135deg, #fff 0%, #f9fafb 100%);
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--green), #00d084);
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
         }
         .stat-number {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--green);
+            font-size: 40px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--green), #00d084);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
         }
-        .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
-
-        /* ── BUTTON ──────────────────────────────────── */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            border-radius: 6px;
-            border: none;
+        .stat-label {
             font-size: 14px;
+            color: var(--muted);
             font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .btn-primary {
-            background: var(--green);
-            color: #fff;
-        }
-        .btn-primary:hover { background: #007a35; }
-        .btn-secondary {
-            background: var(--border);
-            color: var(--text);
-        }
-        .btn-secondary:hover { background: #cbd5e1; }
 
-        /* ── TABLE ───────────────────────────────────── */
+        /* ── TABLE ───────────────────────────────────– */
         .table-container {
             background: #fff;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
         }
         table {
             width: 100%;
             border-collapse: collapse;
         }
         th {
-            background: var(--bg);
-            padding: 14px;
+            background: var(--light);
+            padding: 16px 20px;
             text-align: left;
-            font-weight: 600;
-            font-size: 13px;
+            font-weight: 700;
+            font-size: 12px;
             color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             border-bottom: 1px solid var(--border);
         }
         td {
-            padding: 14px;
+            padding: 18px 20px;
             border-bottom: 1px solid var(--border);
             font-size: 14px;
         }
-        tr:hover { background: var(--bg); }
+        tr:hover { background: var(--light); }
+        tr:last-child td { border-bottom: none; }
 
-        /* ── BADGE ───────────────────────────────────── */
+        /* ── BADGE ───────────────────────────────────– */
         .badge {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
             font-weight: 600;
+            text-transform: capitalize;
         }
-        .badge-green { background: #e8f5ef; color: #059669; }
-        .badge-blue { background: #eff6ff; color: #0284c7; }
+        .badge-admin {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: #0284c7;
+        }
+        .badge-user {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #059669;
+        }
 
-        /* ── LINKS ───────────────────────────────────── */
-        .nav-links {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 16px;
-        }
-        .nav-links a {
-            padding: 8px 16px;
-            text-decoration: none;
+        /* ── EMPTY STATE ─────────────────────────────– */
+        .empty-state {
+            text-align: center;
+            padding: 60px 40px;
             color: var(--muted);
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
         }
-        .nav-links a.active {
-            color: var(--green);
-            border-bottom-color: var(--green);
-        }
-        .nav-links a:hover {
-            color: var(--navy);
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
         }
     </style>
 </head>
@@ -221,21 +275,27 @@
     <div class="container">
         <!-- MESSAGES -->
         @if ($message = Session::get('success'))
-            <div class="alert alert-success">✅ {{ $message }}</div>
+            <div class="alert alert-success">
+                <span style="font-size: 20px;">✅</span>
+                <span>{{ $message }}</span>
+            </div>
         @endif
         @if ($message = Session::get('error'))
-            <div class="alert alert-error">❌ {{ $message }}</div>
+            <div class="alert alert-error">
+                <span style="font-size: 20px;">❌</span>
+                <span>{{ $message }}</span>
+            </div>
         @endif
 
         <!-- NAVIGATION -->
-        <div class="nav-links">
+        <div class="nav-tabs">
             <a href="{{ route('admin.dashboard') }}">📊 Opportunités</a>
             <a href="{{ route('admin.users') }}" class="active">👥 Utilisateurs</a>
         </div>
 
         <!-- HEADER -->
         <div class="page-header">
-            <h1 class="page-title">👥 Utilisateurs de la Plateforme</h1>
+            <h1 class="page-title">Gestion des Utilisateurs</h1>
         </div>
 
         <!-- STATS -->
@@ -244,12 +304,12 @@
                 <div class="stat-number">{{ count($users) }}</div>
                 <div class="stat-label">Utilisateurs totaux</div>
             </div>
-            <div class="stat-card" style="border-left-color: #3b82f6;">
-                <div class="stat-number" style="color: #3b82f6;">{{ count($users->where('is_admin', true)) }}</div>
+            <div class="stat-card">
+                <div class="stat-number" style="background: linear-gradient(135deg, #3b82f6, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ count($users->where('is_admin', true)) }}</div>
                 <div class="stat-label">Administrateurs</div>
             </div>
-            <div class="stat-card" style="border-left-color: #10b981;">
-                <div class="stat-number" style="color: #10b981;">{{ count($users->where('is_admin', false)) }}</div>
+            <div class="stat-card">
+                <div class="stat-number" style="background: linear-gradient(135deg, #10b981, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ count($users->where('is_admin', false)) }}</div>
                 <div class="stat-label">Utilisateurs normaux</div>
             </div>
         </div>
@@ -259,36 +319,49 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Nom</th>
-                        <th>Email</th>
+                        <th>👤 Utilisateur</th>
+                        <th>📧 Email</th>
                         <th>Rôle</th>
-                        <th>Inscrit le</th>
-                        <th>Dernière connexion</th>
+                        <th>📅 Inscrit le</th>
+                        <th>🔗 Dernière connexion</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($users as $user)
                         <tr>
-                            <td><strong>{{ $user->name }}</strong></td>
-                            <td>{{ $user->email }}</td>
                             <td>
-                                <span class="badge {{ $user->is_admin ? 'badge-blue' : 'badge-green' }}">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--green), #00d084); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px;">
+                                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                                    </div>
+                                    <strong style="font-size: 15px;">{{ $user->name }}</strong>
+                                </div>
+                            </td>
+                            <td style="font-family: 'Monaco', 'Courier New', monospace; font-size: 13px; color: var(--muted);">{{ $user->email }}</td>
+                            <td>
+                                <span class="badge {{ $user->is_admin ? 'badge-admin' : 'badge-user' }}">
                                     {{ $user->is_admin ? '👑 Admin' : '👤 Utilisateur' }}
                                 </span>
                             </td>
-                            <td>{{ $user->created_at->format('d/m/Y à H:i') }}</td>
+                            <td style="font-weight: 600;">{{ $user->created_at->format('d/m/Y') }}</td>
                             <td>
                                 @if ($user->last_login_at)
-                                    {{ $user->last_login_at->format('d/m/Y à H:i') }}
+                                    <span style="display: flex; align-items: center; gap: 6px;">
+                                        <span style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block;"></span>
+                                        {{ $user->last_login_at->format('d/m/Y à H:i') }}
+                                    </span>
                                 @else
-                                    <span style="color: var(--muted);">Jamais</span>
+                                    <span style="color: var(--muted); font-style: italic;">Jamais connecté</span>
                                 @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" style="text-align: center; color: var(--muted); padding: 40px;">
-                                Aucun utilisateur inscrit.
+                            <td colspan="5">
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">👥</div>
+                                    <p style="font-weight: 600;">Aucun utilisateur inscrit</p>
+                                </div>
                             </td>
                         </tr>
                     @endforelse
