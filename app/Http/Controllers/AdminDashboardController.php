@@ -3,10 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Opportunite;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AdminDashboardController extends Controller
 {
+    /**
+     * Afficher la liste des utilisateurs
+     */
+    public function listUsers()
+    {
+        $users = User::orderBy('created_at', 'desc')->get();
+        return view('admin.users', compact('users'));
+    }
+
     /**
      * Afficher le tableau de bord admin
      */

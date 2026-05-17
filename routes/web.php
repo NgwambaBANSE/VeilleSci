@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
 // ── Routes Admin (protégées) ──────────────────────────────
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/utilisateurs', [AdminDashboardController::class, 'listUsers'])->name('admin.users');
     Route::get('/admin/opportunites/create', [AdminDashboardController::class, 'create'])->name('admin.create');
     Route::post('/admin/opportunites', [AdminDashboardController::class, 'store'])->name('admin.store');
     Route::get('/admin/opportunites/{opportunite}/edit', [AdminDashboardController::class, 'edit'])->name('admin.edit');

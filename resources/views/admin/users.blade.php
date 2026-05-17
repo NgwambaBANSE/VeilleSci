@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Admin - VeilleSci Burkina</title>
+    <title>Utilisateurs - VeilleSci Burkina</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -31,7 +31,7 @@
             background: var(--bg);
             color: var(--text);
         }
-        
+
         /* ── NAVBAR ──────────────────────────────────── */
         .navbar {
             background: var(--navy2);
@@ -61,10 +61,10 @@
             transition: background 0.2s;
         }
         .btn-logout:hover { background: rgba(239,43,45,0.32); }
-        
+
         /* ── CONTAINER ───────────────────────────────── */
         .container { max-width: 1200px; margin: 0 auto; padding: 32px; }
-        
+
         /* ── MESSAGES ────────────────────────────────── */
         .alert {
             border-radius: 8px;
@@ -82,7 +82,7 @@
             color: #dc2626;
             border-color: #fecaca;
         }
-        
+
         /* ── HEADER ──────────────────────────────────── */
         .page-header {
             display: flex;
@@ -95,7 +95,7 @@
             font-weight: 700;
             color: var(--navy);
         }
-        
+
         /* ── STATS ───────────────────────────────────── */
         .stats-grid {
             display: grid;
@@ -116,7 +116,7 @@
             color: var(--green);
         }
         .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
-        
+
         /* ── BUTTON ──────────────────────────────────── */
         .btn {
             display: inline-flex;
@@ -141,12 +141,7 @@
             color: var(--text);
         }
         .btn-secondary:hover { background: #cbd5e1; }
-        .btn-danger {
-            background: #fee2e2;
-            color: var(--red);
-        }
-        .btn-danger:hover { background: #fecaca; }
-        
+
         /* ── TABLE ───────────────────────────────────── */
         .table-container {
             background: #fff;
@@ -173,7 +168,7 @@
             font-size: 14px;
         }
         tr:hover { background: var(--bg); }
-        
+
         /* ── BADGE ───────────────────────────────────── */
         .badge {
             display: inline-block;
@@ -183,43 +178,30 @@
             font-weight: 600;
         }
         .badge-green { background: #e8f5ef; color: #059669; }
-        .badge-red { background: #fee2e2; color: var(--red); }
         .badge-blue { background: #eff6ff; color: #0284c7; }
-        
-        /* ── ACTIONS ─────────────────────────────────── */
-        .actions {
+
+        /* ── LINKS ───────────────────────────────────── */
+        .nav-links {
             display: flex;
-            gap: 8px;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 16px;
         }
-        .actions a, .actions form {
-            display: inline;
+        .nav-links a {
+            padding: 8px 16px;
+            text-decoration: none;
+            color: var(--muted);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
         }
-        .actions button {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            background: var(--border);
-            color: var(--text);
-            transition: background 0.2s;
+        .nav-links a.active {
+            color: var(--green);
+            border-bottom-color: var(--green);
         }
-        .actions button:hover { background: #cbd5e1; }
-        .actions .btn-edit {
-            background: #dbeafe;
-            color: #0284c7;
+        .nav-links a:hover {
+            color: var(--navy);
         }
-        .actions .btn-edit:hover { background: #bfdbfe; }
-        .actions .btn-delete {
-            background: #fee2e2;
-            color: var(--red);
-        }
-        .actions .btn-delete:hover { background: #fecaca; }
-        .actions .btn-toggle {
-            background: #f3e8ff;
-            color: #7c3aed;
-        }
-        .actions .btn-toggle:hover { background: #e9d5ff; }
     </style>
 </head>
 <body>
@@ -246,92 +228,73 @@
         @endif
 
         <!-- NAVIGATION -->
-        <div style="display: flex; gap: 12px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px;">
-            <a href="{{ route('admin.dashboard') }}" style="padding: 8px 16px; text-decoration: none; color: var(--green); border-bottom: 2px solid var(--green); font-weight: 600; transition: all 0.2s;">📊 Opportunités</a>
-            <a href="{{ route('admin.users') }}" style="padding: 8px 16px; text-decoration: none; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.2s;" onmouseover="this.style.color = 'var(--navy)'" onmouseout="this.style.color = 'var(--muted)'">👥 Utilisateurs</a>
+        <div class="nav-links">
+            <a href="{{ route('admin.dashboard') }}">📊 Opportunités</a>
+            <a href="{{ route('admin.users') }}" class="active">👥 Utilisateurs</a>
         </div>
 
         <!-- HEADER -->
         <div class="page-header">
-            <h1 class="page-title">📊 Tableau de Bord Admin</h1>
-            <a href="{{ route('admin.create') }}" class="btn btn-primary">➕ Ajouter une opportunité</a>
+            <h1 class="page-title">👥 Utilisateurs de la Plateforme</h1>
         </div>
 
         <!-- STATS -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number">{{ $stats['total'] }}</div>
-                <div class="stat-label">Opportunités totales</div>
+                <div class="stat-number">{{ count($users) }}</div>
+                <div class="stat-label">Utilisateurs totaux</div>
+            </div>
+            <div class="stat-card" style="border-left-color: #3b82f6;">
+                <div class="stat-number" style="color: #3b82f6;">{{ count($users->where('is_admin', true)) }}</div>
+                <div class="stat-label">Administrateurs</div>
             </div>
             <div class="stat-card" style="border-left-color: #10b981;">
-                <div class="stat-number" style="color: #10b981;">{{ $stats['actives'] }}</div>
-                <div class="stat-label">Actives</div>
-            </div>
-            <div class="stat-card" style="border-left-color: #6b7280;">
-                <div class="stat-number" style="color: #6b7280;">{{ $stats['inactives'] }}</div>
-                <div class="stat-label">Inactives</div>
-            </div>
-            <div class="stat-card" style="border-left-color: var(--red);">
-                <div class="stat-number" style="color: var(--red);">{{ $stats['urgentes'] }}</div>
-                <div class="stat-label">Urgentes (14 jours)</div>
+                <div class="stat-number" style="color: #10b981;">{{ count($users->where('is_admin', false)) }}</div>
+                <div class="stat-label">Utilisateurs normaux</div>
             </div>
         </div>
 
         <!-- TABLE -->
-        @foreach ($opportunites as $categorie => $opps)
-            @if ($opps->count() > 0)
-                <div class="table-container" style="margin-bottom: 32px;">
-                    <div style="background: var(--bg); padding: 16px 14px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--navy);">
-                        📁 {{ $categorie }} <span style="color: var(--muted); font-weight: 400;">({{ $opps->count() }})</span>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Titre</th>
-                                <th>Domaine</th>
-                                <th>Pays</th>
-                                <th>Date limite</th>
-                                <th>Statut</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($opps as $opp)
-                                <tr>
-                                    <td><strong>{{ substr($opp->titre, 0, 40) }}...</strong></td>
-                                    <td>{{ $opp->domaine }}</td>
-                                    <td>{{ $opp->pays }}</td>
-                                    <td>{{ $opp->date_limite->format('d/m/Y') }}</td>
-                                    <td>
-                                        <span class="badge {{ $opp->active ? 'badge-green' : 'badge-red' }}">
-                                            {{ $opp->active ? '✅ Active' : '❌ Inactive' }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="actions">
-                                            <a href="{{ route('admin.edit', $opp) }}" class="btn-edit">✏️ Éditer</a>
-
-                                            <form method="POST" action="{{ route('admin.toggle', $opp) }}" style="display: inline;" onsubmit="return confirm('{{ $opp->active ? 'Êtes-vous sûr de vouloir désactiver cette opportunité ?' : 'Êtes-vous sûr de vouloir activer cette opportunité ?' }}')">
-                                                @csrf
-                                                <button type="submit" class="btn-toggle">
-                                                    {{ $opp->active ? '🔴 Désactiver' : '🟢 Activer' }}
-                                                </button>
-                                            </form>
-
-                                            <form method="POST" action="{{ route('admin.destroy', $opp) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr ?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn-delete">🗑️ Supprimer</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
-        @endforeach
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Inscrit le</th>
+                        <th>Dernière connexion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($users as $user)
+                        <tr>
+                            <td><strong>{{ $user->name }}</strong></td>
+                            <td>{{ $user->email }}</td>
+                            <td>
+                                <span class="badge {{ $user->is_admin ? 'badge-blue' : 'badge-green' }}">
+                                    {{ $user->is_admin ? '👑 Admin' : '👤 Utilisateur' }}
+                                </span>
+                            </td>
+                            <td>{{ $user->created_at->format('d/m/Y à H:i') }}</td>
+                            <td>
+                                @if ($user->last_login_at)
+                                    {{ $user->last_login_at->format('d/m/Y à H:i') }}
+                                @else
+                                    <span style="color: var(--muted);">Jamais</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: var(--muted); padding: 40px;">
+                                Aucun utilisateur inscrit.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>
