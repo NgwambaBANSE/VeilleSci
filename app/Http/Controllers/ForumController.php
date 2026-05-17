@@ -123,9 +123,9 @@ class ForumController extends Controller
     public function destroyReply(ForumReply $reply)
     {
         abort_if(Auth::id() !== $reply->user_id, 403);
-        $topic = $reply->topic;
+        $topicId = $reply->forum_topic_id;
         $reply->delete();
-        return redirect()->route('forum.show', $topic)
+        return redirect()->route('forum.show', $topicId)
             ->with('success', 'Réponse supprimée.');
     }
 }
