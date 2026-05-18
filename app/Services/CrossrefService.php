@@ -36,13 +36,6 @@ class CrossrefService
                 'sort'             => $sort,
                 'order'            => 'desc',
                 'mailto'           => $this->mailto,     // Polite Pool Crossref
-                'select'           => implode(',', [
-                    'title', 'author', 'published-print',
-                    'published-online', 'DOI', 'URL',
-                    'abstract', 'container-title',
-                    'type', 'is-referenced-by-count',
-                    'subject', 'language',
-                ]),
             ];
 
             // Filtrer par année si demandé
@@ -58,6 +51,7 @@ class CrossrefService
                 Log::warning('Crossref API error', [
                     'status' => $response->status(),
                     'query'  => $query,
+                    'body'   => $response->body(),
                 ]);
                 return [];
             }

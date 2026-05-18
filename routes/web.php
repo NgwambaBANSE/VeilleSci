@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminManagementController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\GoogleAuthController;
@@ -41,6 +42,20 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/admin/opportunites/{opportunite}', [AdminDashboardController::class, 'update'])->name('admin.update');
     Route::delete('/admin/opportunites/{opportunite}', [AdminDashboardController::class, 'destroy'])->name('admin.destroy');
     Route::post('/admin/opportunites/{opportunite}/toggle', [AdminDashboardController::class, 'toggle'])->name('admin.toggle');
+
+    // ── Gestion des Administrateurs ──────────────────────────
+    // ⚠️ Route AJAX search DOIT être AVANT le resource pour éviter le conflit avec {admin}
+    Route::get('/admin/admins/search-users', [AdminManagementController::class, 'search'])->name('admin.admins.search');
+    
+    Route::resource('admin/admins', AdminManagementController::class, [
+        'names' => [
+            'index' => 'admin.admins.index',
+            'create' => 'admin.admins.create',
+            'store' => 'admin.admins.store',
+            'show' => 'admin.admins.show',
+            'destroy' => 'admin.admins.destroy',
+        ]
+    ])->only(['index', 'create', 'store', 'show', 'destroy']);
 });
 
 // ── Articles Scientifiques — routes publiques ────────────

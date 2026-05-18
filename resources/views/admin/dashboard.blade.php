@@ -387,6 +387,7 @@
         <div class="nav-tabs">
             <a href="{{ route('admin.dashboard') }}" class="active">📊 Opportunités</a>
             <a href="{{ route('admin.users') }}">👥 Utilisateurs</a>
+            <a href="{{ route('admin.admins.index') }}">🔐 Administrateurs</a>
         </div>
 
         <!-- HEADER -->

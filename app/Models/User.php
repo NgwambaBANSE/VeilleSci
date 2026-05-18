@@ -43,9 +43,79 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\Profile::class);
     }
+
     // ══════════════════════════════════════════════
-// À ajouter dans app/Models/User.php
-// ══════════════════════════════════════════════
-public function forumTopics() { return $this->hasMany(ForumTopic::class); }
-public function forumReplies() { return $this->hasMany(ForumReply::class); }
+    // Forum Relations
+    // ══════════════════════════════════════════════
+    public function forumTopics()
+    {
+        return $this->hasMany(ForumTopic::class);
+    }
+
+    public function forumReplies()
+    {
+        return $this->hasMany(ForumReply::class);
+    }
+
+    // ══════════════════════════════════════════════
+    // Admin Management Methods
+    // ══════════════════════════════════════════════
+
+    /**
+     * Vérifier si l'utilisateur est administrateur
+     */
+    public function isAdmin(): bool
+    {
+        return $this->is_admin === true;
+    }
+
+    /**
+     * Vérifier si l'utilisateur peut gérer les administrateurs
+     * (doit être administrateur)
+     */
+    public function canManageAdmins(): bool
+    {
+        return $this->isAdmin();
+    }
+
+    /**
+     * Promouvoir l'utilisateur en administrateur
+     */
+    public function promoteToAdmin(): bool
+    {
+        if ($this->isAdmin()) {
+            return false;
+        }
+
+        return $this->update(['is_admin' => true]);
+    }
+
+    /**
+     * Retirer les droits d'administrateur
+     */
+    public function demoteFromAdmin(): bool
+    {
+        if (!$this->isAdmin()) {
+            return false;
+        }
+
+        return $this->update(['is_admin' => false]);
+    }
+
+    /**
+     * Obtenir la liste des administrateurs
+     */
+    public static function admins()
+    {
+        return static::where('is_admin', true);
+    }
+
+    /**
+     * Obtenir la liste des utilisateurs normaux
+     */
+    public static function regularUsers()
+    {
+        return static::where('is_admin', false);
+    }
 }
+
