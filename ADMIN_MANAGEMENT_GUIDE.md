@@ -132,7 +132,7 @@ $user->isAdmin();  # true ou false
 
 4. **Enregistrement des actions**
    - Chaque promotion/rétrogradation est loggée
-   - Voir: `storage/logs/laravel.log`
+   - Voir: `storage/logs/veille_sci.log`
 
 ### 📝 Logs d'Audit
 
@@ -148,7 +148,7 @@ Toutes les actions sont enregistrées:
 
 **Voir les logs:**
 ```bash
-Get-Content storage/logs/laravel.log -Tail 50
+Get-Content storage/logs/veille_sci.log -Tail 50
 ```
 
 ---
@@ -356,7 +356,7 @@ $admins = \App\Models\User::where('is_admin', true)
 | Voir les détails | Cliquez sur "Voir" dans la liste |
 | Retirer les droits | Cliquez sur "Retirer" (avec confirmation) |
 | Via terminal | `php artisan tinker` |
-| Voir les logs | `Get-Content storage/logs/laravel.log` |
+| Voir les logs | `Get-Content storage/logs/veille_sci.log` |
 
 ---
 
@@ -379,3 +379,4 @@ $admins = \App\Models\User::where('is_admin', true)
 **🎉 Le système est prêt à l'emploi!**
 
 Commencez par: `http://localhost:8000/admin/admins`
+

@@ -20,6 +20,32 @@ class SyncScientificArticles extends Command
                             {--limit=20 : Nombre d\'articles à récupérer}
                             {--all : Synchroniser tous les domaines}';
 
+    private const SYNC_DOMAINS = [
+        'machine learning',
+        'bioinformatics',
+        'quantum computing',
+        'artificial intelligence',
+        'biology',
+        'sante',
+        'medecine',
+        'nutrition',
+        'agriculture',
+        'environnement',
+        'eau',
+        'ia',
+        'informatique',
+        'telecommunications',
+        'education',
+        'economie',
+        'sciences-sociales',
+        'chimie',
+        'physique',
+        'mathematiques',
+        'energie',
+        'mines',
+        'general',
+    ];
+
     /**
      * The console command description.
      *
@@ -48,7 +74,7 @@ class SyncScientificArticles extends Command
         $this->info('🔄 Démarrage de la synchronisation des articles scientifiques...');
 
         $domaines = $this->option('all') 
-            ? ['machine learning', 'bioinformatics', 'quantum computing', 'artificial intelligence', 'biology']
+            ? self::SYNC_DOMAINS
             : [$this->option('domaine')];
 
         $limit = $this->option('limit');
@@ -61,7 +87,7 @@ class SyncScientificArticles extends Command
             $bar = $this->output->createProgressBar();
             $bar->start();
 
-            $articlesData = $this->crossrefService->searchArticles($domaine, $limit);
+            $articlesData = $this->crossrefService->searchByField($domaine, $limit);
 
             foreach ($articlesData as $data) {
                 $bar->advance();

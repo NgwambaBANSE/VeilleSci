@@ -87,7 +87,7 @@ limit_req_zone $binary_remote_addr zone=api:10m rate=100r/m;
 
 location /auth/login {
     limit_req zone=login burst=10 nodelay;
-    proxy_pass http://laravel;
+    proxy_pass http://app;
 }
 ```
 
@@ -121,7 +121,7 @@ Options -Indexes
 
 ---
 
-## 3. Commandes Laravel à exécuter
+## 3. Commandes du projet à exécuter
 
 ### Installation et migrations
 
@@ -270,7 +270,7 @@ tail -f storage/logs/audit.log
 grep "Unauthorized access attempt" storage/logs/audit.log | tail -20
 
 # Check error logs
-tail -f storage/logs/laravel.log
+tail -f storage/logs/veille_sci.log
 ```
 
 ---
@@ -314,7 +314,7 @@ aws s3 sync $BACKUP_DIR s3://your-backup-bucket/
 - [ ] Monitor disk space and logs size
 
 ### Monthly tasks
-- [ ] Update Laravel and dependencies: `composer update`
+- [ ] Update project and dependencies: `composer update`
 - [ ] Update OS packages: `apt-get update && apt-get upgrade`
 - [ ] Review user access and permissions
 - [ ] Test backup restoration
@@ -363,3 +363,4 @@ aws s3 sync $BACKUP_DIR s3://your-backup-bucket/
 
 **Dernière mise à jour:** 19 Mai 2026
 **Version:** 1.0
+

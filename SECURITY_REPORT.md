@@ -281,7 +281,7 @@ Voir `SECURITY_DEPLOYMENT_GUIDE.md` pour les détails complets
 
 ## 🔗 RESSOURCES
 
-- [Laravel Security Best Practices](https://laravel.com/docs/security)
+- [Security Best Practices](https://owasp.org/)
 - [OWASP Top 10 2023](https://owasp.org/www-project-top-ten/)
 - [Content Security Policy Reference](https://content-security-policy.com/)
 - [PHP Security Best Practices](https://www.php.net/manual/en/security.php)
@@ -322,3 +322,4 @@ Les 2 corrections restantes sont **partielles mais faciles à compléter** (moin
 **Généré:** 19 Mai 2026  
 **Version:** 1.0  
 **Audit réalisé par:** Analyse automatique + expertise humaine
+

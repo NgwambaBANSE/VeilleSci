@@ -145,8 +145,8 @@ class ArticleController extends Controller
         $domaine = $request->input('domaine', 'machine learning');
         $limit = $request->input('limit', 10);
 
-        // Récupérer les articles de Crossref
-        $articlesData = $this->crossrefService->searchArticles($domaine, $limit);
+        // Récupérer les articles de Crossref en utilisant le domaine métier
+        $articlesData = $this->crossrefService->searchByField($domaine, $limit);
 
         $created = 0;
         $skipped = 0;

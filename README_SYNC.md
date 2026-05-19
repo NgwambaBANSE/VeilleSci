@@ -87,7 +87,7 @@ php artisan articles:generate-summaries --limit=10
 php verify_sync.php
 
 # Voir les logs
-Get-Content storage/logs/laravel.log -Tail 50
+Get-Content storage/logs/veille_sci.log -Tail 50
 ```
 
 ---
@@ -115,7 +115,7 @@ Article::count()  # Doit augmenter
 
 1. **Vérifier les logs**:
    ```bash
-   Get-Content storage/logs/laravel.log -Tail 100
+   Get-Content storage/logs/veille_sci.log -Tail 100
    ```
 
 2. **Tester manuellement**:
@@ -170,3 +170,4 @@ C'est tout! 🚀
 
 **Questions?** Voir les fichiers de documentation détaillée.  
 **Prêt!** Les articles se mettront à jour automatiquement! ✨
+

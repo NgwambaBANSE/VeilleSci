@@ -374,7 +374,7 @@ ls -la storage/ bootstrap/cache/
 ## 📚 Documentation Référence
 
 - [SECURITY_DEPLOYMENT_GUIDE.md](./SECURITY_DEPLOYMENT_GUIDE.md) - Guide complet de déploiement
-- [Laravel Security](https://laravel.com/docs/security)
+- [Security Best Practices](https://www.owasp.org/)
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [CWE/SANS Top 25](https://cwe.mitre.org/top25/)
 
@@ -383,7 +383,7 @@ ls -la storage/ bootstrap/cache/
 ## 📞 Support & Questions
 
 Pour toute question ou problème de sécurité:
-1. Vérifier les logs: `tail -f storage/logs/laravel.log`
+1. Vérifier les logs: `tail -f storage/logs/veille_sci.log`
 2. Consulter la documentation
 3. Faire un test local avant production
 
@@ -392,3 +392,4 @@ Pour toute question ou problème de sécurité:
 **Dernier audit:** 19 Mai 2026  
 **Prochaine audit recommandée:** 19 Août 2026 (Trimestrielle)  
 **Criticalité:** 🔴 HAUTE - À implémenter avant mise en production
+

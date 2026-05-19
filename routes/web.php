@@ -62,7 +62,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 // ── Articles Scientifiques — routes publiques ────────────
 Route::get('/articles',        [ArticleController::class, 'index'])->name('articles.index');
-Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
+Route::get('/articles/{id}', function ($id) {
+    $article = \App\Models\Article::find($id);
+
+    return $article
+        ? redirect()->route('articles.show', $article)
+        : abort(404);
+})->where('id', '[0-9]+');
+Route::get('/articles/{article:slug}', [ArticleController::class, 'show'])->name('articles.show');
 
 // ── Forum — routes publiques ──────────────────────────────
 // ⚠️ /forum/nouveau DOIT être avant /forum/{forum}
@@ -79,8 +86,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/profil',          [ProfileController::class, 'update'])->name('profile.update');
 
     // Articles — favoris
-    Route::post('/articles/{article}/favori',    [ArticleController::class, 'addFavori'])    ->name('articles.favori.add');
-    Route::delete('/articles/{article}/favori',  [ArticleController::class, 'removeFavori'])  ->name('articles.favori.remove');
+    Route::post('/articles/{article:slug}/favori',    [ArticleController::class, 'addFavori'])    ->name('articles.favori.add');
+    Route::delete('/articles/{article:slug}/favori',  [ArticleController::class, 'removeFavori'])  ->name('articles.favori.remove');
 
     // Forum — écriture
     Route::post  ('/forum',                          [ForumController::class, 'store'])            ->name('forum.store');

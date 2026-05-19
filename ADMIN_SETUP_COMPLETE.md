@@ -26,7 +26,7 @@ Un **système complet de gestion des administrateurs** a été mis en place! Les
 
 ## 📁 FICHIERS CRÉÉS
 
-### Backend (PHP/Laravel)
+### Backend (PHP)
 ```
 app/Http/Controllers/AdminManagementController.php
 ├─ index()           - Liste des administrateurs
@@ -197,7 +197,7 @@ User::admins()->get();
 
 ## 📝 LOGS D'AUDIT
 
-Toutes les actions sont enregistrées dans `storage/logs/laravel.log`:
+Toutes les actions sont enregistrées dans `storage/logs/veille_sci.log`:
 
 ```
 [DATE] local.INFO: Admin added {"admin_id":1,"admin_name":"Admin",...}
@@ -206,7 +206,7 @@ Toutes les actions sont enregistrées dans `storage/logs/laravel.log`:
 
 **Consulter:**
 ```bash
-Get-Content storage/logs/laravel.log -Tail 50
+Get-Content storage/logs/veille_sci.log -Tail 50
 ```
 
 ---
@@ -238,7 +238,7 @@ Get-Content storage/logs/laravel.log -Tail 50
 | Retirer les droits | ✅ | /admin/admins/{id} DELETE |
 | Recherche AJAX | ✅ | Intégré au formulaire |
 | Pagination | ✅ | Liste des administrateurs |
-| Logs d'audit | ✅ | storage/logs/laravel.log |
+| Logs d'audit | ✅ | storage/logs/veille_sci.log |
 | Validation | ✅ | Backend + Frontend |
 | Sécurité CSRF | ✅ | Tous les formulaires |
 
@@ -310,7 +310,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 1. **Tester** le système en ajoutant un administrateur
 2. **Explorer** les détails d'un administrateur
-3. **Vérifier** les logs: `Get-Content storage/logs/laravel.log`
+3. **Vérifier** les logs: `Get-Content storage/logs/veille_sci.log`
 4. **Demander** à un nouvel administrateur d'en ajouter d'autres
 
 ---
@@ -326,3 +326,4 @@ Le système de gestion des administrateurs est **100% fonctionnel** et **sécuri
 **Créé le**: 18 mai 2026  
 **Version**: 1.0  
 **Statut**: ✅ Production Ready
+

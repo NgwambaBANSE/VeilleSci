@@ -30,7 +30,7 @@ php artisan articles:sync --domaine="artificial intelligence" --limit=30
 ```
 
 #### B) Via Jobs (Queue - Mode Arrière-Plan)
-Les tâches s'exécutent via Laravel Queue (configuration: `QUEUE_CONNECTION=database`).
+Les tâches s'exécutent via la queue de l'application (configuration: `QUEUE_CONNECTION=database`).
 
 #### C) Scheduler (Automatique - À ACTIVER)
 Les tâches sont programmées dans `routes/console.php`:
@@ -78,9 +78,9 @@ RUN (crontab -l 2>/dev/null; echo "* * * * * cd /app && php artisan schedule:run
 ```
 
 ### Option 4: Superviseur (Long-running Process)
-Installer Supervisor et créer `/etc/supervisor/conf.d/laravel-scheduler.conf`:
+Installer Supervisor et créer `/etc/supervisor/conf.d/veille_sci-scheduler.conf`:
 ```ini
-[program:laravel-scheduler]
+[program:veille_sci-scheduler]
 process_name=%(program_name)s
 command=php /path/to/VeilleSci/artisan schedule:work
 autostart=true
@@ -104,7 +104,7 @@ php artisan queue:work --queue=default --tries=3 --timeout=600
 
 ### Option 2: Supervisor
 ```ini
-[program:laravel-worker]
+[program:veille_sci-worker]
 process_name=%(program_name)s_%(process_num)02d
 command=php /path/to/VeilleSci/artisan queue:work --queue=default --tries=3 --timeout=600
 autostart=true
@@ -125,7 +125,7 @@ php artisan schedule:list
 
 ### Afficher les logs
 ```bash
-tail -f storage/logs/laravel.log
+tail -f storage/logs/veille_sci.log
 ```
 
 ### Lancer le scheduler en mode debug (une fois)
@@ -167,7 +167,7 @@ php artisan articles:sync --domaine="machine learning" --limit=5
 
 ### 2. Vérifier les logs
 ```bash
-tail -f storage/logs/laravel.log | grep -E "(✅|❌|🔄)"
+tail -f storage/logs/veille_sci.log | grep -E "(✅|❌|🔄)"
 ```
 ✓ Doit voir les messages de sync
 
@@ -189,7 +189,7 @@ php artisan schedule:run
 ## 🆘 DÉPANNAGE
 
 ### Les articles ne se créent pas
-1. Vérifier les logs: `tail -f storage/logs/laravel.log`
+1. Vérifier les logs: `tail -f storage/logs/veille_sci.log`
 2. Vérifier les clés API dans `.env`:
    ```env
    ANTHROPIC_API_KEY=sk-ant-...
@@ -228,16 +228,16 @@ sudo crontab -e
 * * * * * cd /home/user/VeilleSci && /usr/bin/php /home/user/VeilleSci/artisan schedule:run >> /dev/null 2>&1
 
 # 2. Configurer les workers (optionnel)
-sudo vim /etc/supervisor/conf.d/laravel-worker.conf
+sudo vim /etc/supervisor/conf.d/veille_sci-worker.conf
 
 # 3. Redémarrer Supervisor
 sudo supervisorctl reread
 sudo supervisorctl update
-sudo supervisorctl start laravel-worker:*
+sudo supervisorctl start veille_sci-worker:*
 
 # 4. Vérifier
 ps aux | grep schedule:work  # Doit voir le process
-tail -f /home/user/VeilleSci/storage/logs/laravel.log
+tail -f /home/user/VeilleSci/storage/logs/veille_sci.log
 ```
 
 ---
@@ -275,3 +275,4 @@ R: Oui, commentez les lignes du scheduler dans `routes/console.php`.
 **Dernière mise à jour**: 18 mai 2026
 **Version**: 1.0
 **Auteur**: VeilleSci Dev Team
+

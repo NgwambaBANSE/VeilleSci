@@ -200,7 +200,7 @@ Racine/
 ### Aucun article n'est créé
 ```bash
 # 1. Vérifier les logs
-Get-Content storage/logs/laravel.log -Tail 100
+Get-Content storage/logs/veille_sci.log -Tail 100
 
 # 2. Tester une requête simple
 php artisan articles:sync --domaine="biologie" --limit=1
@@ -220,7 +220,7 @@ $env:ANTHROPIC_API_KEY  # PowerShell
 php artisan articles:generate-summaries --limit=3
 
 # Voir les erreurs
-tail -f storage/logs/laravel.log
+tail -f storage/logs/veille_sci.log
 ```
 
 ### Le scheduler ne fonctionne pas
@@ -303,4 +303,5 @@ Maintenant:
 
 **Date**: 18 mai 2026  
 **Version**: 1.0 - Production Ready  
-**Système**: Laravel 11 + Crossref API + Claude AI
+**Système**: VeilleSci 11 + Crossref API + Claude AI
+

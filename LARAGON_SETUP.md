@@ -34,11 +34,11 @@ Créer un fichier `C:\laragon\www\VeilleSci\run_scheduler.ps1`:
 
 ```powershell
 # run_scheduler.ps1
-$laravelPath = "C:\laragon\www\VeilleSci"
+$projectPath = "C:\laragon\www\VeilleSci"
 $phpPath = "C:\laragon\bin\php\php-8.3.0-Win32-vs16-x64\php.exe"
 
 while ($true) {
-    Set-Location $laravelPath
+    Set-Location $projectPath
     & $phpPath artisan schedule:run
     Start-Sleep -Seconds 60
 }
@@ -90,10 +90,10 @@ Exécuter `run_scheduler.bat` et le laisser tourner!
 php artisan schedule:list
 
 # Voir les logs
-Get-Content storage/logs/laravel.log -Tail 50
+Get-Content storage/logs/veille_sci.log -Tail 50
 
 # Ou en temps réel
-tail -f storage/logs/laravel.log
+tail -f storage/logs/veille_sci.log
 ```
 
 ### 5. Vérifier que ça marche
@@ -140,7 +140,7 @@ notepad .env
 php artisan articles:sync --domaine="biologie" --limit=2
 
 # 3. Voir les erreurs
-Get-Content storage/logs/laravel.log -Tail 100
+Get-Content storage/logs/veille_sci.log -Tail 100
 ```
 
 ### Problème: Task Scheduler ne fonctionne pas
@@ -187,7 +187,7 @@ php artisan schedule:run
 ## 📞 Support
 
 Si ça ne fonctionne pas:
-1. Vérifier les logs: `tail -f storage/logs/laravel.log`
+1. Vérifier les logs: `tail -f storage/logs/veille_sci.log`
 2. Tester manuellement: `php artisan articles:sync --limit=1`
 3. Vérifier `.env` pour les clés API
 
@@ -196,3 +196,4 @@ Si ça ne fonctionne pas:
 **Prêt à synchroniser!** 🎉
 
 Once you have set up the scheduler, you will get automatic article updates!
+

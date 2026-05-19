@@ -87,7 +87,7 @@ class CrossrefService
 
             // Sciences sociales
             'education'        => 'education Africa OR school enrollment Burkina Faso OR literacy West Africa',
-            'economie'         => 'economic development West Africa OR poverty reduction Sahel',
+            'economie'         => 'economic development West Africa OR poverty reduction Sahel OR economies OR économie OR finance OR public policy OR fiscal policy OR monetary policy OR microfinance OR macroeconomics',
             'sciences-sociales'=> 'social sciences Africa OR governance West Africa',
 
             // Sciences fondamentales
@@ -223,14 +223,15 @@ class CrossrefService
     {
         if (!$abstract) return null;
 
-        // Supprimer les balises JATS XML
-        $clean = preg_replace('/<jats:[^>]+>/', '', $abstract);
-        $clean = preg_replace('/<\/jats:[^>]+>/', '', $clean);
+        // Supprimer les balises JATS XML, insensible à la casse
+        $clean = preg_replace('/<jats:[^>]+>/i', '', $abstract);
+        $clean = preg_replace('/<\/jats:[^>]+>/i', '', $clean);
 
         // Supprimer toutes les autres balises HTML
         $clean = strip_tags($clean);
 
-        // Nettoyer les espaces multiples
+        // Décode les entités HTML et nettoie les espaces multiples
+        $clean = html_entity_decode($clean, ENT_QUOTES | ENT_XML1, 'UTF-8');
         $clean = preg_replace('/\s+/', ' ', $clean);
         $clean = trim($clean);
 
@@ -320,7 +321,7 @@ class CrossrefService
             'Environnement'  => ['climate', 'environment', 'ecology', 'biodiversity', 'forest', 'water', 'sustainability'],
             'Informatique'   => ['computer', 'software', 'algorithm', 'data', 'network', 'artificial intelligence', 'machine learning'],
             'Éducation'      => ['education', 'learning', 'teaching', 'school', 'university', 'literacy'],
-            'Économie'       => ['economics', 'finance', 'poverty', 'development', 'market', 'trade'],
+            'Économie'       => ['economics', 'économie', 'finance', 'finance comportementale', 'poverty', 'développement', 'development', 'market', 'trade', 'politique économique', 'public policy', 'fiscal policy', 'monetary policy', 'microfinance', 'macroeconomics'],
             'Biologie'       => ['biology', 'genetics', 'genomics', 'cell', 'molecular', 'microbiology'],
             'Chimie'         => ['chemistry', 'chemical', 'polymer', 'material', 'synthesis'],
             'Physique'       => ['physics', 'energy', 'solar', 'quantum', 'optics'],

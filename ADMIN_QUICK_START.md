@@ -69,3 +69,4 @@ Les utilisateurs promus peuvent maintenant:
 ---
 
 **Besoin d'aide?** → Voir `ADMIN_MANAGEMENT_GUIDE.md`
+

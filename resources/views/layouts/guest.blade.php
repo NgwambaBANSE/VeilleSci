@@ -22,11 +22,15 @@
             <div class="w-full max-w-md">
                 <!-- Logo Section -->
                 <div class="text-center mb-8">
-                    <a href="/">
+                    <a href="/" class="inline-flex items-center justify-center gap-3 mx-auto text-center">
+                        <span class="text-4xl">🔬</span>
+                        <div>
+                            <div class="text-2xl font-semibold text-gray-900">VeilleSci <span class="text-green-600">BF</span></div>
+                            <div class="text-sm text-gray-600">Portail de veille scientifique</div>
+                        </div>
                     </a>
                     <h1 class="mt-4 text-3xl font-bold text-gray-900">Connectez-vous</h1>
                     <p class="mt-2 text-gray-600">Accédez à votre compte VeilleSci</p>
-                    
                 </div>
 
                 <!-- Form Container -->

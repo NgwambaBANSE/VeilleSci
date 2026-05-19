@@ -136,7 +136,7 @@ if ($user->isAdmin()) { ... }
 
 ## 📊 Logs et Audit
 
-Toutes les actions d'administration sont enregistrées dans `storage/logs/laravel.log`:
+Toutes les actions d'administration sont enregistrées dans `storage/logs/veille_sci.log`:
 
 ```
 [2026-05-18 10:30:15] local.INFO: Admin added {"admin_id":1,"admin_name":"Jean Dupont","new_admin_id":5,"new_admin_name":"Marie Martin"}
@@ -235,3 +235,4 @@ User::admins()->get();
 ---
 
 **Système de Gestion des Administrateurs - Prêt à l'emploi! ✅**
+

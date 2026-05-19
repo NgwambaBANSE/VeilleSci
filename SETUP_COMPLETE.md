@@ -17,7 +17,7 @@ Toute la mise à jour automatique des articles scientifiques est maintenant **co
 - ✓ `articles:generate-summaries` - Génération des résumés IA (NOUVEAU)
 
 ### 3. **Mise en Queue** ✅
-- ✓ `SyncArticlesJob` - Traitement en arrière-plan via Laravel Queue (NOUVEAU)
+- ✓ `SyncArticlesJob` - Traitement en arrière-plan via la queue de l'application (NOUVEAU)
 
 ### 4. **Scheduler Configuré** ✅
 - ✓ 5 tâches programmées dans `routes/console.php` (NOUVEAU)
@@ -143,7 +143,7 @@ php artisan tinker
   > Article::whereNotNull('resume_ia')->count()
 
 # Logs
-Get-Content storage/logs/laravel.log -Tail 100
+Get-Content storage/logs/veille_sci.log -Tail 100
 ```
 
 ---
@@ -180,7 +180,7 @@ php artisan tinker
 Article::count()
 
 # Voir les logs pour confirmer l'exécution
-Get-Content storage/logs/laravel.log -Tail 20
+Get-Content storage/logs/veille_sci.log -Tail 20
 ```
 
 ---
@@ -192,7 +192,7 @@ Get-Content storage/logs/laravel.log -Tail 20
 | Aucun article créé | Tester: `php artisan articles:sync --limit=1` |
 | API timeout | Vérifier `.env` pour les clés API |
 | Scheduler ne fonctionne pas | Lancer `scheduler.bat` ou configurer Task Scheduler |
-| Erreur de log | `Get-Content storage/logs/laravel.log -Tail 100` |
+| Erreur de log | `Get-Content storage/logs/veille_sci.log -Tail 100` |
 | Pas d'accès PHP | Utiliser Laragon Terminal |
 
 ---
@@ -241,3 +241,4 @@ Get-Content storage/logs/laravel.log -Tail 20
 **Questions?** Consultez la documentation ou relancez `verify_sync.php` pour un diagnostic.
 
 **C'est fait!** Les articles scientifiques se mettront à jour automatiquement! 🎊
+

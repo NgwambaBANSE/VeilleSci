@@ -30,7 +30,7 @@ class SyncArticlesJob implements ShouldQueue
         Log::info("🔄 Démarrage sync pour domaine: {$this->domaine}");
 
         try {
-            $articlesData = $crossrefService->searchArticles($this->domaine, $this->limit);
+            $articlesData = $crossrefService->searchByField($this->domaine, $this->limit);
 
             $created = 0;
             $skipped = 0;

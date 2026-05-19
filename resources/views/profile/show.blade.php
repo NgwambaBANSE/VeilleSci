@@ -30,6 +30,28 @@
         .btn-green { background: var(--green); color: #fff; border: none; cursor: pointer; font-family: inherit; }
         .btn-green:hover { background: var(--green2); }
 
+        .nav-toggle { display: none; background: transparent; border: none; cursor: pointer; width: 42px; height: 42px; align-items: center; justify-content: center; }
+        .nav-toggle span { display: block; width: 22px; height: 2px; background: var(--navy); border-radius: 999px; position: relative; transition: transform .2s ease, opacity .2s ease; }
+        .nav-toggle span::before,
+        .nav-toggle span::after { content: ''; display: block; width: 22px; height: 2px; background: var(--navy); border-radius: 999px; position: absolute; left: 0; transition: transform .2s ease, opacity .2s ease; }
+        .nav-toggle span::before { top: -7px; }
+        .nav-toggle span::after { top: 7px; }
+        .nav-toggle.active span { transform: rotate(45deg); }
+        .nav-toggle.active span::before { transform: rotate(90deg); top: 0; }
+        .nav-toggle.active span::after { opacity: 0; }
+        .mobile-menu { display: none; flex-direction: column; gap: 10px; padding: 16px 24px; background: #fff; border-bottom: 1px solid var(--border); }
+        .mobile-menu a, .mobile-menu button { width: 100%; text-align: left; }
+        @media (max-width: 760px) {
+            nav { padding: 0 18px; min-height: auto; height: auto; flex-wrap: wrap; gap: 12px; }
+            .nav-links { display: none; width: 100%; justify-content: stretch; flex-wrap: wrap; gap: 10px; }
+            .nav-toggle { display: inline-flex; }
+        }
+        @media (max-width: 520px) {
+            .topbar { padding: 7px 16px; font-size: 11px; }
+            .logo-title { font-size: 15px; }
+            .btn-sm { width: 100%; }
+        }
+
         /* Banner profil */
         .banner {
             background: linear-gradient(135deg, var(--navy2), var(--navy));
@@ -133,7 +155,19 @@
             <button type="submit" class="btn-sm btn-outline" style="cursor:pointer;">🚪 Déconnexion</button>
         </form>
     </div>
+    <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+    </button>
 </nav>
+<div class="mobile-menu" aria-hidden="true">
+    <a href="/app" class="btn-sm btn-outline">📋 Opportunités</a>
+    <a href="/forum" class="btn-sm btn-outline">💬 Forum</a>
+    <a href="{{ route('profile.edit') }}" class="btn-sm btn-green">✏️ Modifier le profil</a>
+    <form method="POST" action="/logout" style="margin:0;">
+        @csrf
+        <button type="submit" class="btn-sm btn-outline" style="cursor:pointer; width:100%; text-align:left;">🚪 Déconnexion</button>
+    </form>
+</div>
 
 {{-- Banner --}}
 <div class="banner">
@@ -316,6 +350,22 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.querySelector('.nav-toggle');
+        const menu = document.querySelector('.mobile-menu');
+        if (!toggle || !menu) return;
+
+        toggle.addEventListener('click', function () {
+            const isOpen = menu.style.display === 'flex';
+            menu.style.display = isOpen ? 'none' : 'flex';
+            toggle.classList.toggle('active', !isOpen);
+            toggle.setAttribute('aria-expanded', String(!isOpen));
+            menu.setAttribute('aria-hidden', String(isOpen));
+        });
+    });
+</script>
 
 </body>
 </html>

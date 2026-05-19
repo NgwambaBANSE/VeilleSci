@@ -100,20 +100,20 @@
     </a>
     <div class="nav-links">
         <a href="/app" class="btn btn-outline">📋 Opportunités</a>
-        @auth
-            <a href="{{ route('profile.show') }}" class="btn btn-outline">👤 Mon profil</a>
-            <a href="{{ route('forum.create') }}" class="btn btn-green">✏️ Nouveau sujet</a>
-        @else
-            <a href="{{ route('login') }}" class="btn btn-outline">Se connecter</a>
-            <a href="{{ route('register') }}" class="btn btn-green">Créer un compte</a>
-        @endauth
+        <?php if(auth()->guard()->check()): ?>
+            <a href="<?php echo e(route('profile.show')); ?>" class="btn btn-outline">👤 Mon profil</a>
+            <a href="<?php echo e(route('forum.create')); ?>" class="btn btn-green">✏️ Nouveau sujet</a>
+        <?php else: ?>
+            <a href="<?php echo e(route('login')); ?>" class="btn btn-outline">Se connecter</a>
+            <a href="<?php echo e(route('register')); ?>" class="btn btn-green">Créer un compte</a>
+        <?php endif; ?>
     </div>
     <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
         <span aria-hidden="true"></span>
     </button>
 </nav>
 
-{{-- Banner --}}
+
 <div class="banner">
     <div class="banner-inner">
         <div>
@@ -121,105 +121,106 @@
             <p>Posez vos questions, partagez vos expériences, entraidez-vous.</p>
         </div>
         <div class="banner-stats">
-            <div class="bstat"><div class="bstat-num">{{ $stats['total'] }}</div><div class="bstat-label">Sujets</div></div>
-            <div class="bstat"><div class="bstat-num">{{ $stats['replies'] }}</div><div class="bstat-label">Réponses</div></div>
-            <div class="bstat"><div class="bstat-num">{{ $stats['resolus'] }}</div><div class="bstat-label">Résolus</div></div>
-            <div class="bstat"><div class="bstat-num">{{ $stats['membres'] }}</div><div class="bstat-label">Membres</div></div>
+            <div class="bstat"><div class="bstat-num"><?php echo e($stats['total']); ?></div><div class="bstat-label">Sujets</div></div>
+            <div class="bstat"><div class="bstat-num"><?php echo e($stats['replies']); ?></div><div class="bstat-label">Réponses</div></div>
+            <div class="bstat"><div class="bstat-num"><?php echo e($stats['resolus']); ?></div><div class="bstat-label">Résolus</div></div>
+            <div class="bstat"><div class="bstat-num"><?php echo e($stats['membres']); ?></div><div class="bstat-label">Membres</div></div>
         </div>
     </div>
 </div>
 
 <main>
     <div>
-        {{-- Filtres --}}
+        
         <div class="filters">
-            <form method="GET" action="{{ route('forum.index') }}">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="🔍 Rechercher un sujet..."/>
+            <form method="GET" action="<?php echo e(route('forum.index')); ?>">
+                <input type="text" name="search" value="<?php echo e(request('search')); ?>" placeholder="🔍 Rechercher un sujet..."/>
                 <select name="categorie">
                     <option value="Toutes">Toutes les catégories</option>
-                    @foreach(['Bourses','Publications','Conférences','Formations','Stages','Méthodologie','Général'] as $cat)
-                        <option value="{{ $cat }}" {{ request('categorie') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
-                    @endforeach
+                    <?php $__currentLoopData = ['Bourses','Publications','Conférences','Formations','Stages','Méthodologie','Général']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($cat); ?>" <?php echo e(request('categorie') === $cat ? 'selected' : ''); ?>><?php echo e($cat); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
                 <button type="submit" class="btn btn-outline">Filtrer</button>
-                @auth
-                    <a href="{{ route('forum.create') }}" class="btn btn-green">+ Nouveau sujet</a>
-                @endauth
+                <?php if(auth()->guard()->check()): ?>
+                    <a href="<?php echo e(route('forum.create')); ?>" class="btn btn-green">+ Nouveau sujet</a>
+                <?php endif; ?>
             </form>
         </div>
 
-        {{-- Liste --}}
-        @forelse($topics as $topic)
-            <a href="{{ route('forum.show', $topic) }}"
-               class="topic-card {{ $topic->epingle ? 'epingle' : '' }} {{ $topic->resolu ? 'resolu' : '' }}">
+        
+        <?php $__empty_1 = true; $__currentLoopData = $topics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $topic): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <a href="<?php echo e(route('forum.show', $topic)); ?>"
+               class="topic-card <?php echo e($topic->epingle ? 'epingle' : ''); ?> <?php echo e($topic->resolu ? 'resolu' : ''); ?>">
 
                 <div class="topic-avatar">
-                    {{ strtoupper(substr($topic->user->name, 0, 1)) }}
+                    <?php echo e(strtoupper(substr($topic->user->name, 0, 1))); ?>
+
                 </div>
 
                 <div class="topic-body">
                     <div class="topic-meta">
-                        <span class="badge badge-cat">{{ $topic->categorie }}</span>
-                        @if($topic->epingle) <span class="badge badge-epingle">📌 Épinglé</span> @endif
-                        @if($topic->resolu)  <span class="badge badge-resolu">✅ Résolu</span> @endif
-                        @if($topic->created_at->diffInHours() < 24) <span class="badge badge-new">Nouveau</span> @endif
+                        <span class="badge badge-cat"><?php echo e($topic->categorie); ?></span>
+                        <?php if($topic->epingle): ?> <span class="badge badge-epingle">📌 Épinglé</span> <?php endif; ?>
+                        <?php if($topic->resolu): ?>  <span class="badge badge-resolu">✅ Résolu</span> <?php endif; ?>
+                        <?php if($topic->created_at->diffInHours() < 24): ?> <span class="badge badge-new">Nouveau</span> <?php endif; ?>
                     </div>
-                    <div class="topic-titre">{{ $topic->titre }}</div>
-                    <div class="topic-excerpt">{{ Str::limit($topic->contenu, 100) }}</div>
+                    <div class="topic-titre"><?php echo e($topic->titre); ?></div>
+                    <div class="topic-excerpt"><?php echo e(Str::limit($topic->contenu, 100)); ?></div>
                     <div class="topic-footer">
-                        <span>👤 {{ $topic->user->name }}</span>
-                        <span>💬 {{ $topic->replies_count ?? $topic->replies->count() }} réponse(s)</span>
-                        <span>👁 {{ $topic->vues }} vue(s)</span>
-                        <span>🕐 {{ $topic->created_at->diffForHumans() }}</span>
+                        <span>👤 <?php echo e($topic->user->name); ?></span>
+                        <span>💬 <?php echo e($topic->replies_count ?? $topic->replies->count()); ?> réponse(s)</span>
+                        <span>👁 <?php echo e($topic->vues); ?> vue(s)</span>
+                        <span>🕐 <?php echo e($topic->created_at->diffForHumans()); ?></span>
                     </div>
                 </div>
             </a>
-        @empty
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <div class="empty">
                 <div class="empty-icon">💬</div>
                 <p>Aucun sujet pour le moment.<br/>Soyez le premier à poster !</p>
-                @auth
-                    <a href="{{ route('forum.create') }}" class="btn btn-green" style="display:inline-block;margin-top:16px;">✏️ Créer un sujet</a>
-                @endauth
+                <?php if(auth()->guard()->check()): ?>
+                    <a href="<?php echo e(route('forum.create')); ?>" class="btn btn-green" style="display:inline-block;margin-top:16px;">✏️ Créer un sujet</a>
+                <?php endif; ?>
             </div>
-        @endforelse
+        <?php endif; ?>
 
-        {{-- Pagination --}}
-        <div style="margin-top:20px">{{ $topics->withQueryString()->links() }}</div>
+        
+        <div style="margin-top:20px"><?php echo e($topics->withQueryString()->links()); ?></div>
     </div>
 
-    {{-- Sidebar --}}
+    
     <div>
-        {{-- Catégories --}}
+        
         <div class="sidebar-card">
             <div class="sidebar-head">📂 Catégories</div>
             <div class="sidebar-body" style="padding:0 18px;">
-                @foreach(['Bourses','Publications','Conférences','Formations','Stages','Méthodologie','Général'] as $cat)
-                    <a href="{{ route('forum.index', ['categorie' => $cat]) }}" class="cat-item">
-                        <span>{{ $cat }}</span>
-                        <span class="cat-count">{{ \App\Models\ForumTopic::where('categorie', $cat)->count() }}</span>
+                <?php $__currentLoopData = ['Bourses','Publications','Conférences','Formations','Stages','Méthodologie','Général']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <a href="<?php echo e(route('forum.index', ['categorie' => $cat])); ?>" class="cat-item">
+                        <span><?php echo e($cat); ?></span>
+                        <span class="cat-count"><?php echo e(\App\Models\ForumTopic::where('categorie', $cat)->count()); ?></span>
                     </a>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
 
-        {{-- Top contributeurs --}}
+        
         <div class="sidebar-card">
             <div class="sidebar-head">🏆 Top contributeurs</div>
             <div class="sidebar-body" style="padding:8px 18px;">
-                @foreach(\App\Models\User::withCount('forumReplies')->orderByDesc('forum_replies_count')->take(5)->get() as $u)
+                <?php $__currentLoopData = \App\Models\User::withCount('forumReplies')->orderByDesc('forum_replies_count')->take(5)->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="top-user">
-                        <div class="top-avatar">{{ strtoupper(substr($u->name,0,1)) }}</div>
+                        <div class="top-avatar"><?php echo e(strtoupper(substr($u->name,0,1))); ?></div>
                         <div>
-                            <div class="top-name">{{ $u->name }}</div>
-                            <div class="top-count">{{ $u->forum_replies_count }} réponse(s)</div>
+                            <div class="top-name"><?php echo e($u->name); ?></div>
+                            <div class="top-count"><?php echo e($u->forum_replies_count); ?> réponse(s)</div>
                         </div>
                     </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
 
-        {{-- Règles --}}
+        
         <div class="sidebar-card">
             <div class="sidebar-head">📜 Règles du forum</div>
             <div class="sidebar-body" style="font-size:13px;color:var(--muted);line-height:1.7;">
@@ -252,4 +253,4 @@
 </html>
 
 </body>
-</html>
+</html><?php /**PATH C:\laragon\www\VeilleSci\resources\views/forum/index.blade.php ENDPATH**/ ?>

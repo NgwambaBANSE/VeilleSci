@@ -215,7 +215,7 @@ $users = User::regularUsers()->get();
 | Je veux retirer les droits | Cliquez "Retirer" dans `/admin/admins` |
 | Je ne vois pas le bouton | Vérifiez que vous êtes administrateur |
 | Via terminal | `php artisan tinker` |
-| Voir les logs | `Get-Content storage/logs/laravel.log` |
+| Voir les logs | `Get-Content storage/logs/veille_sci.log` |
 
 ---
 
@@ -288,3 +288,4 @@ Les administrateurs peuvent commencer à ajouter d'autres administrateurs! 🔐
 **Date**: 18 mai 2026  
 **Version**: 1.0  
 **Prêt pour la production**: OUI ✓
+

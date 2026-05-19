@@ -17,6 +17,17 @@
         .logo-sub{font-size:10px;color:var(--muted)}
         .btn{padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;font-family:inherit;border:none;transition:all .2s}
         .btn-outline{border:1.5px solid var(--border);color:var(--navy);background:transparent}
+        .nav-toggle{display:none;width:42px;height:42px;border:none;background:transparent;cursor:pointer;align-items:center;justify-content:center}
+        .nav-toggle span{display:block;width:22px;height:2px;background:var(--navy);border-radius:999px;position:relative;transition:transform .2s ease,opacity .2s ease}
+        .nav-toggle span::before,.nav-toggle span::after{content:'';display:block;width:22px;height:2px;background:var(--navy);border-radius:999px;position:absolute;left:0;transition:transform .2s ease,opacity .2s ease}
+        .nav-toggle span::before{top:-7px}
+        .nav-toggle span::after{top:7px}
+        .nav-mobile-menu{display:none;flex-direction:column;gap:10px;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border)}
+        .nav-mobile-menu a{width:100%;text-align:left}
+        @media(max-width:760px){
+            .nav-links{display:none;width:100%}
+            .nav-toggle{display:inline-flex}
+        }
 
         main{max-width:720px;margin:36px auto 60px;padding:0 24px}
         .page-header{margin-bottom:24px}
@@ -53,8 +64,16 @@
         <div class="logo-icon">🔬</div>
         <div><div class="logo-title">VeilleSci <span>BF</span></div><div class="logo-sub">Portail de Veille Scientifique</div></div>
     </a>
-    <a href="{{ route('forum.index') }}" class="btn btn-outline">← Retour au forum</a>
+    <div class="nav-links">
+        <a href="{{ route('forum.index') }}" class="btn btn-outline">← Retour au forum</a>
+    </div>
+    <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+    </button>
 </nav>
+<div class="nav-mobile-menu" aria-hidden="true">
+    <a href="{{ route('forum.index') }}" class="btn btn-outline">← Retour au forum</a>
+</div>
 
 <main>
     <div class="page-header">
@@ -123,6 +142,22 @@
         </div>
     </div>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.querySelector('.nav-toggle');
+        const menu = document.querySelector('.nav-mobile-menu');
+        if (!toggle || !menu) return;
+
+        toggle.addEventListener('click', function () {
+            const isOpen = menu.style.display === 'flex';
+            menu.style.display = isOpen ? 'none' : 'flex';
+            toggle.classList.toggle('active', !isOpen);
+            toggle.setAttribute('aria-expanded', String(!isOpen));
+            menu.setAttribute('aria-hidden', String(isOpen));
+        });
+    });
+</script>
 
 </body>
 </html>
