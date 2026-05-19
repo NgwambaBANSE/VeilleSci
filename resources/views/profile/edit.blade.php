@@ -31,8 +31,10 @@
 
         /* Sections */
         .section { background: #fff; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; overflow: hidden; }
-        .section-head { padding: 16px 24px; border-bottom: 1px solid var(--border); background: var(--light); display: flex; align-items: center; gap: 10px; }
-        .section-head h2 { font-size: 15px; font-weight: 700; color: var(--navy); }
+        .section-head { padding: 16px 24px; border-bottom: 1px solid var(--border); background: var(--light); display: flex; align-items: center; gap: 12px; }
+        .section-head span { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 12px; background: #f0fdf4; color: var(--green); font-size: 18px; }
+        .section-head h2 { font-size: 16px; font-weight: 700; color: var(--navy); }
+        .section-head small { color: var(--muted); }
         .section-body { padding: 24px; }
 
         /* Grilles de champs */
@@ -58,18 +60,73 @@
         textarea { resize: vertical; min-height: 100px; }
         select { cursor: pointer; }
 
-        /* Upload */
+        /* Upload zones - Photo & CV */
         .upload-zone {
-            border: 2px dashed var(--border); border-radius: 10px;
-            padding: 24px; text-align: center; cursor: pointer;
-            transition: border-color .2s, background .2s;
+            border: 2px dashed var(--border); border-radius: 12px;
+            padding: 32px 24px; text-align: center; cursor: pointer;
+            transition: all .3s ease; position: relative;
+            background: linear-gradient(135deg, rgba(0,154,68,0.02) 0%, rgba(0,154,68,0.01) 100%);
         }
-        .upload-zone:hover { border-color: var(--green); background: rgba(0,154,68,0.03); }
-        .upload-icon { font-size: 32px; margin-bottom: 8px; }
-        .upload-label { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
-        .upload-hint { font-size: 12px; color: var(--muted); }
+        .upload-zone:hover {
+            border-color: var(--green); border-width: 2px;
+            background: linear-gradient(135deg, rgba(0,154,68,0.08) 0%, rgba(0,154,68,0.04) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,154,68,0.1);
+        }
+        .upload-zone.drag-over {
+            border-color: var(--green); background: rgba(0,154,68,0.12);
+            transform: scale(1.01);
+        }
+        .upload-icon { font-size: 48px; margin-bottom: 12px; display: block; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+        .upload-label { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+        .upload-hint { font-size: 13px; color: var(--muted); }
         .upload-zone input[type="file"] { display: none; }
-        .current-file { display: flex; align-items: center; gap: 8px; background: var(--light); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin-top: 10px; font-size: 13px; color: var(--navy); }
+        
+        /* Current file display */
+        .current-file { display: flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1.5px solid #86efac; border-radius: 10px; padding: 14px 16px; margin-top: 16px; font-size: 13px; color: var(--navy); position: relative; }
+        .current-file::before { content: '✓'; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: var(--green); color: white; border-radius: 50%; font-size: 12px; font-weight: bold; }
+        .current-file .file-name { flex: 1; }
+        .current-file .file-size { font-size: 12px; color: var(--muted); }
+        
+        /* Photo preview */
+        .photo-preview-container { margin-top: 20px; display: grid; gap: 16px; }
+        .photo-preview { position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .photo-preview.has-preview { border: 3px solid var(--green); }
+        .photo-preview img {
+            width: 100%; height: 280px; object-fit: cover; display: block;
+        }
+        .photo-preview-remove {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(239,68,68,0.9); color: white;
+            border: none; border-radius: 50%; width: 36px; height: 36px;
+            cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center;
+            transition: all .2s; z-index: 10;
+        }
+        .photo-preview-remove:hover { background: var(--red); transform: scale(1.1); }
+        .photo-preview-name { padding: 12px; background: var(--light); border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+        
+        /* CV preview */
+        .cv-preview-container { margin-top: 20px; }
+        .cv-preview {
+            display: flex; align-items: center; gap: 14px;
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+            border: 2px solid #e9d5ff; border-radius: 14px;
+            padding: 18px 20px; position: relative;
+            box-shadow: 0 10px 20px rgba(99,102,241,0.06);
+        }
+        .cv-icon { font-size: 34px; min-width: 46px; display: flex; align-items: center; justify-content: center; }
+        .cv-info { flex: 1; min-width: 0; }
+        .cv-name { font-weight: 700; color: var(--navy); font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .cv-meta { font-size: 13px; color: var(--muted); margin-top: 4px; }
+        .cv-remove {
+            background: transparent; border: 1.5px solid var(--red);
+            color: var(--red); border-radius: 8px; padding: 8px 14px;
+            cursor: pointer; font-size: 13px; font-weight: 700; transition: all .2s; font-family: inherit;
+        }
+        .cv-remove:hover { background: var(--red); color: white; }
+        
+        .file-input-wrapper { position: relative; }
 
         /* Erreurs */
         .error-msg { font-size: 12px; color: var(--red); }
@@ -213,17 +270,32 @@
         <div class="section">
             <div class="section-head"><span>🖼️</span><h2>Photo de profil</h2></div>
             <div class="section-body">
-                <label for="photo_input" class="upload-zone">
-                    <div class="upload-icon">📷</div>
-                    <div class="upload-label">Cliquez pour choisir une photo</div>
-                    <div class="upload-hint">JPG, PNG · Max 2 Mo</div>
-                    <input type="file" id="photo_input" name="photo" accept="image/*"
-                           onchange="document.getElementById('photo_name').textContent = this.files[0]?.name || ''"/>
-                </label>
+                <div class="file-input-wrapper">
+                    <label for="photo_input" class="upload-zone" id="photo_zone">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-label">Glissez votre photo ici</div>
+                        <div class="upload-hint">ou cliquez pour sélectionner · JPG, PNG · Max 2 Mo</div>
+                        <input type="file" id="photo_input" name="photo" accept="image/*"/>
+                    </label>
+                </div>
+                
+                <div id="photo_preview_wrapper" class="photo-preview-container" style="display: none;">
+                    <div class="photo-preview has-preview">
+                        <img id="photo_preview" src="" alt="Aperçu de la photo"/>
+                        <button type="button" class="photo-preview-remove" onclick="clearPhoto(event)">✕</button>
+                        <div class="photo-preview-name" id="photo_file_name"></div>
+                    </div>
+                </div>
+                
                 @if($profile->photo)
-                    <div class="current-file">📎 Photo actuelle : {{ basename($profile->photo) }}</div>
+                    <div class="photo-preview-container">
+                        <div class="photo-preview has-preview">
+                            <img src="{{ asset('storage/' . $profile->photo) }}" alt="Photo actuelle"/>
+                            <button type="button" class="photo-preview-remove" onclick="removeCurrentPhoto(event)">✕</button>
+                            <div class="photo-preview-name">{{ basename($profile->photo) }}</div>
+                        </div>
+                    </div>
                 @endif
-                <div id="photo_name" style="margin-top:8px; font-size:13px; color:var(--green);"></div>
             </div>
         </div>
 
@@ -231,17 +303,37 @@
         <div class="section">
             <div class="section-head"><span>📎</span><h2>Curriculum Vitae (CV)</h2></div>
             <div class="section-body">
-                <label for="cv_input" class="upload-zone">
-                    <div class="upload-icon">📄</div>
-                    <div class="upload-label">Cliquez pour téléverser votre CV</div>
-                    <div class="upload-hint">PDF uniquement · Max 5 Mo</div>
-                    <input type="file" id="cv_input" name="cv" accept=".pdf"
-                           onchange="document.getElementById('cv_name').textContent = this.files[0]?.name || ''"/>
-                </label>
+                <div class="file-input-wrapper">
+                    <label for="cv_input" class="upload-zone" id="cv_zone">
+                        <div class="upload-icon">📄</div>
+                        <div class="upload-label">Déposez votre CV ici</div>
+                        <div class="upload-hint">ou cliquez pour sélectionner · PDF uniquement · Max 5 Mo</div>
+                        <input type="file" id="cv_input" name="cv" accept=".pdf"/>
+                    </label>
+                </div>
+                
+                <div id="cv_preview_wrapper" style="display: none; margin-top: 20px;">
+                    <div class="cv-preview">
+                        <div class="cv-icon">📑</div>
+                        <div class="cv-info">
+                            <div class="cv-name" id="cv_file_name"></div>
+                            <div class="cv-meta" id="cv_file_size"></div>
+                        </div>
+                        <button type="button" class="cv-remove" onclick="clearCV(event)">Supprimer</button>
+                    </div>
+                </div>
+                
                 @if($profile->cv)
-                    <div class="current-file">📎 CV actuel : {{ basename($profile->cv) }}</div>
+                    <div style="margin-top: 20px;">
+                        <div class="cv-preview">
+                            <div class="cv-icon">📑</div>
+                            <div class="cv-info">
+                                <div class="cv-name">{{ basename($profile->cv) }}</div>
+                                <div class="cv-meta">CV actuel · <a href="{{ asset('storage/' . $profile->cv) }}" target="_blank" style="color: var(--green); text-decoration: none; font-weight: 600;">Télécharger</a></div>
+                            </div>
+                        </div>
+                    </div>
                 @endif
-                <div id="cv_name" style="margin-top:8px; font-size:13px; color:var(--green);"></div>
             </div>
         </div>
 
@@ -323,6 +415,116 @@
 </main>
 
 <script>
+// ────────── Gestion Photo ──────────
+const photoInput = document.getElementById('photo_input');
+const photoZone = document.getElementById('photo_zone');
+const photoPreviewWrapper = document.getElementById('photo_preview_wrapper');
+const photoPreview = document.getElementById('photo_preview');
+const photoFileName = document.getElementById('photo_file_name');
+
+// Afficher aperçu au changement
+photoInput.addEventListener('change', function(e) {
+    if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            photoPreview.src = event.target.result;
+            photoFileName.textContent = this.files[0].name + ' (' + (this.files[0].size / 1024 / 1024).toFixed(2) + ' Mo)';
+            photoPreviewWrapper.style.display = 'block';
+        };
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+
+// Drag-and-drop pour photo
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    photoZone.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+['dragenter', 'dragover'].forEach(eventName => {
+    photoZone.addEventListener(eventName, () => photoZone.classList.add('drag-over'), false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    photoZone.addEventListener(eventName, () => photoZone.classList.remove('drag-over'), false);
+});
+
+photoZone.addEventListener('drop', (e) => {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    photoInput.files = files;
+    const event = new Event('change', { bubbles: true });
+    photoInput.dispatchEvent(event);
+}, false);
+
+function clearPhoto(e) {
+    e.preventDefault();
+    photoInput.value = '';
+    photoPreviewWrapper.style.display = 'none';
+}
+
+function removeCurrentPhoto(e) {
+    e.preventDefault();
+    if (confirm('Êtes-vous sûr de vouloir supprimer la photo actuelle ?')) {
+        document.querySelector('input[name="photo_remove"]')?.remove();
+        const removeField = document.createElement('input');
+        removeField.type = 'hidden';
+        removeField.name = 'photo_remove';
+        removeField.value = '1';
+        document.querySelector('form').appendChild(removeField);
+        e.target.closest('.photo-preview').parentElement.remove();
+    }
+}
+
+// ────────── Gestion CV ──────────
+const cvInput = document.getElementById('cv_input');
+const cvZone = document.getElementById('cv_zone');
+const cvPreviewWrapper = document.getElementById('cv_preview_wrapper');
+const cvFileName = document.getElementById('cv_file_name');
+const cvFileSize = document.getElementById('cv_file_size');
+
+// Afficher aperçu au changement
+cvInput.addEventListener('change', function(e) {
+    if (this.files && this.files[0]) {
+        const file = this.files[0];
+        cvFileName.textContent = file.name;
+        cvFileSize.textContent = 'Fichier PDF · ' + (file.size / 1024 / 1024).toFixed(2) + ' Mo';
+        cvPreviewWrapper.style.display = 'block';
+    }
+});
+
+// Drag-and-drop pour CV
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    cvZone.addEventListener(eventName, preventDefaults, false);
+});
+
+['dragenter', 'dragover'].forEach(eventName => {
+    cvZone.addEventListener(eventName, () => cvZone.classList.add('drag-over'), false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    cvZone.addEventListener(eventName, () => cvZone.classList.remove('drag-over'), false);
+});
+
+cvZone.addEventListener('drop', (e) => {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    cvInput.files = files;
+    const event = new Event('change', { bubbles: true });
+    cvInput.dispatchEvent(event);
+}, false);
+
+function clearCV(e) {
+    e.preventDefault();
+    cvInput.value = '';
+    cvPreviewWrapper.style.display = 'none';
+}
+
+// ────────── Publications ──────────
 let pubCount = {{ count($profile->publications ?? []) }};
 
 function addPub() {

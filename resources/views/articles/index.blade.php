@@ -72,7 +72,7 @@
 
         {{-- Nombre de résultats --}}
         <div style="font-size:13px; color:var(--muted); margin-bottom:14px;">
-            {{ $articles->total() }} article(s) trouvé(s)
+            {{ $articles->total() }} article(s) trouvé(s) — affichage de 6 articles par page.
         </div>
 
         {{-- Liste --}}
@@ -87,7 +87,7 @@
         @endforelse
 
         {{-- Pagination --}}
-        {{ $articles->links('components.pagination') }}
+        {{ $articles->withQueryString()->links('components.pagination') }}
     </div>
 
     {{-- ── Sidebar ── --}}

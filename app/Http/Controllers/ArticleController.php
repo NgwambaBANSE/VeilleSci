@@ -30,13 +30,11 @@ class ArticleController extends Controller
             'domaine' => 'nullable|string|max:100|regex:/^[a-zA-Z0-9\s\-éèêëàâäùûüôöçñ]+$/',
             'categorie' => 'nullable|string|max:100|regex:/^[a-zA-Z0-9\s\-éèêëàâäùûüôöçñ]+$/',
             'page' => 'nullable|integer|min:1|max:1000',
-            'per_page' => 'nullable|integer|min:1|max:100',
         ], [
             'search.regex' => 'Le paramètre de recherche contient des caractères non autorisés.',
             'domaine.regex' => 'Le domaine contient des caractères non autorisés.',
             'categorie.regex' => 'La catégorie contient des caractères non autorisés.',
             'page.max' => 'Le numéro de page est trop élevé.',
-            'per_page.max' => 'Le nombre d\'articles par page ne peut pas dépasser 100.',
         ]);
 
         $query = Article::where('active', true);
@@ -61,7 +59,7 @@ class ArticleController extends Controller
             });
         }
 
-        $perPage = $validated['per_page'] ?? 15;
+        $perPage = 4;
         $articles = $query
             ->latest('date_publication')
             ->paginate($perPage, ['*'], 'page', $validated['page'] ?? 1);
