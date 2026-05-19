@@ -12,8 +12,9 @@ class OpportuniteController extends Controller
     public function index(Request $request)
     {
         $query = Opportunite::query()
-            ->where('active', true)
-            ->where('date_limite', '>=', now());
+            ->where('active', true);
+            // Commenté temporairement pour debug
+            // ->where('date_limite', '>=', now());
 
         if ($request->filled('categorie') && $request->categorie !== 'Toutes') {
             $query->where('categorie', $request->categorie);

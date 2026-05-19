@@ -28,6 +28,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'google_id' => 'encrypted',      // Chiffrer les données OAuth
+            'google_token' => 'encrypted',   // Chiffrer les tokens sensibles
+            'avatar' => 'encrypted',         // Chiffrer les URLs d'avatar
         ];
     }
 

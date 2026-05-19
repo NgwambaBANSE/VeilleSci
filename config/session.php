@@ -47,7 +47,7 @@ return [
     |
     */
 
-    'encrypt' => env('SESSION_ENCRYPT', false),
+    'encrypt' => env('SESSION_ENCRYPT', true),  // Chiffrer les sessions par défaut
 
     /*
     |--------------------------------------------------------------------------
@@ -74,6 +74,19 @@ return [
     */
 
     'connection' => env('SESSION_CONNECTION'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Session Cookie Security Settings
+    |--------------------------------------------------------------------------
+    |
+    | Security enhancements for session cookies
+    |
+    */
+
+    'secure' => env('SESSION_SECURE_COOKIES', false),  // true en production (HTTPS only)
+    'http_only' => true,  // Empêcher l'accès JavaScript (protection XSS)
+    'same_site' => 'lax',  // Protection CSRF
 
     /*
     |--------------------------------------------------------------------------

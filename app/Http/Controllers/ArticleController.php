@@ -24,21 +24,36 @@ class ArticleController extends Controller
      */
     public function index(Request $request)
     {
+        // ✅ SECURITY FIX #16: Valider et nettoyer les paramètres d'entrée
+        $validated = $request->validate([
+            'search' => 'nullable|string|max:100|regex:/^[a-zA-Z0-9\s\-éèêëàâäùûüôöçñ]+$/',
+            'domaine' => 'nullable|string|max:100|regex:/^[a-zA-Z0-9\s\-éèêëàâäùûüôöçñ]+$/',
+            'categorie' => 'nullable|string|max:100|regex:/^[a-zA-Z0-9\s\-éèêëàâäùûüôöçñ]+$/',
+            'page' => 'nullable|integer|min:1|max:1000',
+            'per_page' => 'nullable|integer|min:1|max:100',
+        ], [
+            'search.regex' => 'Le paramètre de recherche contient des caractères non autorisés.',
+            'domaine.regex' => 'Le domaine contient des caractères non autorisés.',
+            'categorie.regex' => 'La catégorie contient des caractères non autorisés.',
+            'page.max' => 'Le numéro de page est trop élevé.',
+            'per_page.max' => 'Le nombre d\'articles par page ne peut pas dépasser 100.',
+        ]);
+
         $query = Article::where('active', true);
 
         // Filtre par domaine
-        if ($request->filled('domaine')) {
-            $query->where('domaine', $request->domaine);
+        if (!empty($validated['domaine'])) {
+            $query->where('domaine', $validated['domaine']);
         }
 
         // Filtre par catégorie
-        if ($request->filled('categorie')) {
-            $query->where('categorie', $request->categorie);
+        if (!empty($validated['categorie'])) {
+            $query->where('categorie', $validated['categorie']);
         }
 
         // Recherche
-        if ($request->filled('search')) {
-            $search = $request->search;
+        if (!empty($validated['search'])) {
+            $search = $validated['search'];
             $query->where(function ($q) use ($search) {
                 $q->where('titre', 'like', "%$search%")
                   ->orWhere('resume_ia', 'like', "%$search%")
@@ -46,9 +61,10 @@ class ArticleController extends Controller
             });
         }
 
+        $perPage = $validated['per_page'] ?? 15;
         $articles = $query
             ->latest('date_publication')
-            ->paginate(15);
+            ->paginate($perPage, ['*'], 'page', $validated['page'] ?? 1);
 
         $domaines = Article::where('active', true)
             ->distinct('domaine')

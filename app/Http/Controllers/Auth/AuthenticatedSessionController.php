@@ -35,8 +35,8 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended('/admin');
         }
 
-        // Rediriger vers l'application pour les utilisateurs normaux
-        return redirect()->intended('/app');
+        // Rediriger vers la page des articles pour les utilisateurs normaux
+        return redirect()->intended('/articles');
     }
 
     /**

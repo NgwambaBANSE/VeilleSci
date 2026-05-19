@@ -20,13 +20,13 @@ require __DIR__.'/auth.php';
 Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 
-// ── Application React (PUBLIQUE — aucun middleware auth) ──
-Route::get('/app', function () {
-    return view('app');      // Pas de ->middleware('auth') ici !
+// ── Application React (protégée — authentification requise) ──
+Route::middleware('auth')->get('/app', function () {
+    return view('app');
 });
 
 // ── Routes Profil (protégées) ───────────────────────────────
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profil', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profil/modifier', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
@@ -45,7 +45,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // ── Gestion des Administrateurs ──────────────────────────
     // ⚠️ Route AJAX search DOIT être AVANT le resource pour éviter le conflit avec {admin}
-    Route::get('/admin/admins/search-users', [AdminManagementController::class, 'search'])->name('admin.admins.search');
+    Route::get('/admin/admins/search-users', [AdminManagementController::class, 'search'])
+        ->middleware('throttle:30,1')  // 30 requêtes par minute
+        ->name('admin.admins.search');
     
     Route::resource('admin/admins', AdminManagementController::class, [
         'names' => [

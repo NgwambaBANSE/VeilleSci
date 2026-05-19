@@ -18,6 +18,11 @@ class GoogleAuthController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
 
+            // ✅ SECURITY FIX #15: Vérifier que l'email a été vérifié par Google
+            if (!$googleUser->user['email_verified']) {
+                return redirect('/login')->with('error', 'Votre email Google n\'est pas vérifié. Veuillez vérifier votre email et réessayer.');
+            }
+
             $user = User::where('google_id', $googleUser->id)->first();
 
             if (!$user) {
@@ -28,6 +33,7 @@ class GoogleAuthController extends Controller
                         'google_id' => $googleUser->id,
                         'google_token' => $googleUser->token,
                         'avatar' => $googleUser->avatar,
+                        'email_verified_at' => now(), // Marquer comme vérifié puisque Google l'a vérifié
                     ]);
                 } else {
                     $user = User::create([
@@ -36,6 +42,7 @@ class GoogleAuthController extends Controller
                         'google_id' => $googleUser->id,
                         'google_token' => $googleUser->token,
                         'avatar' => $googleUser->avatar,
+                        'email_verified_at' => now(), // Marquer comme vérifié puisque Google l'a vérifié
                         'password' => bcrypt(str()->random(24)),
                     ]);
                 }
